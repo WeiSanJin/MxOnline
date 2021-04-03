@@ -5,11 +5,14 @@ from django.db import models
 
 from apps.users.models import BaseModel
 from apps.organizations.models import Teacher
+
 # 1.设计表结构注意的点
 '''
     实体1 <关系> 实体2
     课程 章节 视频 课程资源 
 '''
+
+
 # 2.实体的具体字段
 # 3.每个字段的类型，是否必填
 
@@ -35,6 +38,9 @@ class Course(BaseModel):
         verbose_name = "课程信息"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 章节信息
 class Lesson(BaseModel):
@@ -46,6 +52,9 @@ class Lesson(BaseModel):
     class Meta:
         verbose_name = "课程章节"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 # 视频
@@ -59,6 +68,9 @@ class Video(BaseModel):
         verbose_name = "视频"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 课程资源
 class CourseResource(BaseModel):
@@ -70,3 +82,5 @@ class CourseResource(BaseModel):
         verbose_name = "课程资源"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name

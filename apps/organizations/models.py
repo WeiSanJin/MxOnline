@@ -12,6 +12,9 @@ class City(BaseModel):
         verbose_name = "城市"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 课程机构
 class CourseOrg(BaseModel):
@@ -31,6 +34,9 @@ class CourseOrg(BaseModel):
         verbose_name = "课程机构"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 教师
 class Teacher(BaseModel):
@@ -48,3 +54,6 @@ class Teacher(BaseModel):
     class Meta:
         verbose_name = "教师"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
