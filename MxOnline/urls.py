@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 
 import xadmin
 
-from apps.users.views import LoginView, LogoutView, SendSmsView,DynamicLoginView
+from apps.users.views import LoginView, LogoutView, SendSmsView, DynamicLoginView, RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +31,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name="logout"),
     path('captcha/', include('captcha.urls')),
     path('send_sms/', csrf_exempt(SendSmsView.as_view()), name="send_sms"),
+    path('register/', RegisterView.as_view(), name="register"),
 ]

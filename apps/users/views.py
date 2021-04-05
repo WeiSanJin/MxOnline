@@ -6,7 +6,7 @@ from django.urls import reverse
 
 import redis
 
-from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm
+from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm,RegisterPostForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
@@ -120,3 +120,37 @@ class DynamicLoginView(View):
             d_form = DynamicLoginForm
             return render(request, "login.html",
                           {"login_form": login_form, 'd_form': d_form, "dynamic_login": dynamic_login})
+
+
+# 用户注册
+class RegisterView(View):
+    def get(self, request, *args, **kwargs):
+        # 获取验证码返回给前端
+        register_get_form = RegisterGetForm
+        return render(request, "register.html", {
+            "register_get_form": register_get_form
+        })
+
+    def post(self, request, *args, **kwargs):
+        # 验证用户输入是否正确
+        register_post_form = RegisterPostForm(request.POST)
+        if register_post_form.is_valid():
+            mobile = register_post_form.cleaned_data["mobile"]
+            password = register_post_form.cleaned_data["password"]
+
+            # 用户不存在，进行注册用户
+            user = UserProfile(username=mobile)
+            # 将随机密码进行加密
+            user.set_password(password)
+            user.mobile = mobile
+            user.save()
+            # 进行登录并跳转至首页
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            register_get_form = RegisterGetForm
+            return render(request, "register.html", {
+                "register_get_form": register_get_form,
+                "register_post_form": register_post_form
+            })
+
