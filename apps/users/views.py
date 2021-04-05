@@ -1,15 +1,28 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
-from apps.users.forms import LoginForm
+import redis
+
+from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm
+from apps.utils.random_str import generate_random
+from apps.utils.TencentSendSms import send_sms_single
+from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
+from apps.users.models import UserProfile
 
 
+# 登录
 class LoginView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, "login.html")
+        # 判断用户是否登录
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("index"))
+        login_form = DynamicLoginForm
+        return render(request, "login.html", {
+            "login_form": login_form
+        })
 
     def post(self, request, *args, **kwargs):
         # 表单验证--此方法造成代码冗余不适用
@@ -40,3 +53,70 @@ class LoginView(View):
                 return render(request, "login.html", {"msg": "用户名或密码错误", "login_form": login_form})
         else:
             return render(request, "login.html", {"login_form": login_form})
+
+
+# 退出登录
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        # 重定向到首页
+        return HttpResponseRedirect(reverse("index"))
+
+
+# 发送验证码
+class SendSmsView(View):
+    def post(self, request, *args, **kwargs):
+        send_sms_form = DynamicLoginForm(request.POST)
+        re_dict = {}
+        # 如果前端图形验证码输入正确
+        if send_sms_form.is_valid():
+            # 验证码验证成功
+            mobile = send_sms_form.cleaned_data["mobile"]
+            # 随机生成验证码
+            code = generate_random(4, 0)
+            # 验证码接口返回信息
+            re_json = send_sms_single(mobile, TENCENT_Template_ID, [code, 5])
+            # 如果手机验证码发送成功
+            if re_json['result'] == 0:
+                re_dict["status"] = "success"
+                r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, charset="utf8", decode_responses=True)
+                r.set(str(mobile), code)
+                # 设置验证码五分钟过去
+                r.expire(str(mobile), 60 * 5)
+            else:
+                re_dict["msg"] = re_json["errmsg"]
+        else:
+            for key, value in send_sms_form.errors.items():
+                re_dict[key] = value[0]
+        return JsonResponse(re_dict)
+
+
+# 动态验证码登录
+class DynamicLoginView(View):
+    def post(self, request, *args, **kwargs):
+        # 验证用户输入是否正确
+        login_form = DynamicLoginPostForm(request.POST)
+        dynamic_login = True
+        if login_form.is_valid():
+            mobile = login_form.cleaned_data["mobile"]
+            # 查询用户是否存在
+            existed_users = UserProfile.objects.filter(mobile=mobile)
+            if existed_users:
+                # 存在——获取用户信息进行登录
+                user = existed_users[0]
+            else:
+                # 用户不存在，进行注册用户
+                user = UserProfile(username=mobile)
+                # 随机生成密码
+                password = generate_random(10, 2)
+                # 将随机密码进行加密
+                user.set_password(password)
+                user.mobile = mobile
+                user.save()
+            # 进行登录并跳转至首页
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            d_form = DynamicLoginForm
+            return render(request, "login.html",
+                          {"login_form": login_form, 'd_form': d_form, "dynamic_login": dynamic_login})

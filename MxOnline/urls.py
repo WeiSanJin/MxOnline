@@ -14,16 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt  # 去除csrf_token验证
 from django.views.generic import TemplateView
 
 import xadmin
 
-from apps.users.views import LoginView
+from apps.users.views import LoginView, LogoutView, SendSmsView,DynamicLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
-    path('login/', LoginView.as_view(), name="login")
+    path('login/', LoginView.as_view(), name="login"),
+    path('d_login/', csrf_exempt(DynamicLoginView.as_view()), name="d_login"),
+    path('logout/', LogoutView.as_view(), name="logout"),
+    path('captcha/', include('captcha.urls')),
+    path('send_sms/', csrf_exempt(SendSmsView.as_view()), name="send_sms"),
 ]

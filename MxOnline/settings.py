@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'kdj01v*6w)^%u4r_z74uje$1jaw9%ff3uw7k_91(!^y9un_m6z'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -43,6 +41,7 @@ INSTALLED_APPS = [
     'apps.organizations.apps.OrganizationsConfig',
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MxOnline.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -89,7 +87,6 @@ DATABASES = {
         'HOST': "121.36.16.210"
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -124,7 +121,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -132,3 +128,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# 腾讯云短信配置
+
+
+# Redis配置
+REDIS_HOST = "127.0.0.1"
+REDIS_PORT = 6379
