@@ -25,6 +25,13 @@ class OrgView(View):
             if city_id.isdigit():
                 all_orgs = all_orgs.filter(city_id=int(city_id))
 
+        # 对机构进行排序
+        sort = request.GET.get("sort", "")
+        if sort == "students":
+            all_orgs = all_orgs.order_by("-students")
+        elif sort == "courses":
+            all_orgs = all_orgs.order_by("-course_nums")
+
         # 总共有多少家机构
         org_data['nums'] = all_orgs.count()
 
@@ -33,13 +40,6 @@ class OrgView(View):
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-
-        # 对机构进行排序
-        sort = request.GET.get("sort", "")
-        if sort == "students":
-            all_orgs = all_orgs.order_by("-students")
-        elif sort == "courses":
-            all_orgs = all_orgs.order_by("-course_nums")
 
         p = Paginator(all_orgs, per_page=5, request=request)
         orgs = p.page(page)
