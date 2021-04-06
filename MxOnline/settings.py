@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
     'captcha',
+    'pure_pagination'
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ STATICFILES_DIRS = [
 
 # 腾讯云短信配置
 
+
 # Redis配置
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
@@ -139,3 +141,10 @@ REDIS_PORT = 6379
 # 上传图片配置
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 分页相关设置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 6,
+    'MARGIN_PAGES_DISPLAYED': 3,
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
