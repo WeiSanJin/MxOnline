@@ -13,6 +13,8 @@ class OrgView(View):
         all_orgs = CourseOrg.objects.all()
         # 全部的城市
         org_data['citys'] = City.objects.all()
+        # 对授课机构进行排名
+        hot_orgs = all_orgs.order_by("-click_nums")[:3]
 
         # 对课程机构进行筛选
         category = request.GET.get("ct", "")
@@ -48,5 +50,6 @@ class OrgView(View):
             "org_data": org_data,
             "category": category,
             "city_id": city_id,
-            "sort": sort
+            "sort": sort,
+            "hot_orgs": hot_orgs
         })

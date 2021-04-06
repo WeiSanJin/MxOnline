@@ -155,32 +155,19 @@
             <div class="right companyrank layout">
                 <div class="head">授课机构排名</div>
 
-
+                {% for item in hot_orgs %}
                 <dl class="des">
-                    <dt class="num fl">1</dt>
+                    <dt class="num fl">{{ forloop.counter }}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>慕课网</h1></a>
-                        <p>北京市</p>
+                        <a href="/company/2/"><h1>{{ item.name }}</h1></a>
+                        <ul>
+                            <li class="first"><p class="pic9">课程数：<span> {{ item.course_nums }}</span></p>
+                                            <p class="c7">学习人数：<span> {{ item.students }}</span></p></li>
+                        </ul>
+                        <p>{{ item.address }}</p>
                     </dd>
                 </dl>
-
-                <dl class="des">
-                    <dt class="num fl">2</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>慕课网2</h1></a>
-                        <p>深圳市</p>
-                    </dd>
-                </dl>
-
-                <dl class="des">
-                    <dt class="num fl">3</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>北京大学</h1></a>
-                        <p>北京市</p>
-                    </dd>
-                </dl>
-
-
+                {% endfor %}
             </div>
         </div>
     </section>

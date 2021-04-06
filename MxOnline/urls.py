@@ -23,7 +23,6 @@ from django.views.static import serve
 import xadmin
 
 from apps.users.views import LoginView, LogoutView, SendSmsView, DynamicLoginView, RegisterView
-from apps.organizations.views import OrgView
 from MxOnline.settings import MEDIA_ROOT
 
 urlpatterns = [
@@ -40,6 +39,6 @@ urlpatterns = [
     # 配置上传文件的访问url
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     # 机构相关页面
-    path('org_list/', OrgView.as_view(), name="org_list"),
+    url(r'^org/', include(('apps.organizations.urls', "organizations"), namespace="org")),
 
 ]
