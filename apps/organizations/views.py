@@ -11,10 +11,22 @@ class OrgView(View):
         org_data = {}
         # 从数据库中获取数据
         all_orgs = CourseOrg.objects.all()
-        # 总共有多少家机构
-        org_data['nums'] = CourseOrg.objects.count()
         # 全部的城市
         org_data['citys'] = City.objects.all()
+
+        # 对课程机构进行筛选
+        category = request.GET.get("ct", "")
+        if category:
+            all_orgs = all_orgs.filter(category=category)
+
+        # 对所在进行筛选
+        city_id = request.GET.get("city", "")
+        if city_id:
+            if city_id.isdigit():
+                all_orgs = all_orgs.filter(city_id=int(city_id))
+
+        # 总共有多少家机构
+        org_data['nums'] = all_orgs.count()
 
         # 对课程机构数据进行分页
         try:
@@ -27,4 +39,6 @@ class OrgView(View):
         return render(request, "org-list.html", {
             "all_orgs": orgs,
             "org_data": org_data,
+            "category": category,
+            "city_id":city_id
         })

@@ -22,7 +22,7 @@ class CourseOrg(BaseModel):
     name = models.CharField(verbose_name="机构名称", max_length=50)
     desc = models.TextField(verbose_name="机构描述")
     tag = models.CharField(verbose_name="机构标签", max_length=10, default="全国知名")
-    degree = models.CharField(verbose_name="机构类别", max_length=4, choices=(("pxjg", "培训机构"), ("gr", "个人"), ("gx", "高校")))
+    category = models.CharField(verbose_name="机构类别", max_length=4, choices=(("pxjg", "培训机构"), ("gr", "个人"), ("gx", "高校")))
     click_nums = models.IntegerField(verbose_name="点击数", default=0)
     fav_nums = models.IntegerField(verbose_name="收藏数", default=0)
     image = models.ImageField(verbose_name="封面图", max_length=100, upload_to="org/%Y/%m")
