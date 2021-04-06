@@ -30,6 +30,19 @@ class CourseOrg(BaseModel):
     students = models.IntegerField(verbose_name="学习人数", default=0)
     course_nums = models.IntegerField(verbose_name="课程数", default=0)
 
+    is_auth = models.BooleanField(verbose_name="是否认证", default=False)
+    is_gold = models.BooleanField(verbose_name="是否金牌", default=False)
+
+    def courses(self):
+        '''
+        # 此方法易出现异常
+        from apps.courses.models import Course
+        courses = Course.objects.filter(course_org=self)
+        '''
+        # 经典课程前3个
+        courses = self.course_set.filter(is_classics=True)[:3]
+        return courses
+
     class Meta:
         verbose_name = "课程机构"
         verbose_name_plural = verbose_name

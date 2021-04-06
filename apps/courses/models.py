@@ -4,7 +4,7 @@ from datetime import datetime
 from django.db import models
 
 from apps.users.models import BaseModel
-from apps.organizations.models import Teacher
+from apps.organizations.models import Teacher, CourseOrg
 
 # 1.设计表结构注意的点
 '''
@@ -20,6 +20,7 @@ from apps.organizations.models import Teacher
 # 课程信息
 class Course(BaseModel):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name="讲师")
+    course_org = models.ForeignKey(CourseOrg, null=True, blank=True, on_delete=models.CASCADE, verbose_name="课程机构")
     name = models.CharField(verbose_name="课程名", max_length=50)
     desc = models.CharField(verbose_name="课程描述", max_length=100)
     tag = models.CharField(verbose_name="课程标签", max_length=10, default="")
@@ -33,6 +34,7 @@ class Course(BaseModel):
     degree = models.CharField(verbose_name="难度", max_length=2, choices=(("cj", "初级"), ("zj", "中级"), ("gj", "高级")))
     detail = models.TextField(verbose_name="课程详情")
     image = models.ImageField(verbose_name="封面图", max_length=100, upload_to="courses/%Y/%m")
+    is_classics = models.BooleanField(verbose_name="是否经典课程", default=False)
 
     class Meta:
         verbose_name = "课程信息"
