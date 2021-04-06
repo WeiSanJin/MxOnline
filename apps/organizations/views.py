@@ -81,6 +81,7 @@ class AddAskView(View):
 # 机构首页
 class OrgHomeView(View):
     def get(self, request, org_id, *args, **kwargs):
+        course_page = "home"
         course_org = CourseOrg.objects.get(id=int(org_id))
         course_org.click_nums += 1
         course_org.save()
@@ -92,4 +93,21 @@ class OrgHomeView(View):
             "all_courses": all_courses,
             "all_teacher": all_teacher,
             "course_org": course_org,
+            "course_page":course_page
+        })
+
+
+# 机构讲师
+class OrgTeacherView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        course_page = "teacher"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        all_teacher = course_org.teacher_set.all()
+        return render(request, "org-detail-teachers.html", {
+            "all_teacher": all_teacher,
+            "course_org": course_org,
+            "course_page":course_page
         })
