@@ -93,7 +93,7 @@ class OrgHomeView(View):
             "all_courses": all_courses,
             "all_teacher": all_teacher,
             "course_org": course_org,
-            "course_page":course_page
+            "course_page": course_page
         })
 
 
@@ -109,5 +109,46 @@ class OrgTeacherView(View):
         return render(request, "org-detail-teachers.html", {
             "all_teacher": all_teacher,
             "course_org": course_org,
-            "course_page":course_page
+            "course_page": course_page
+        })
+
+
+# 机构课程
+class OrgCourseView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        course_page = "course"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        all_course = course_org.course_set.all()
+        # 对课程机构数据进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_course, per_page=1, request=request)
+        courses = p.page(page)
+
+        return render(request, "org-detail-course.html", {
+            "all_course": courses,
+            "course_org": course_org,
+            "course_page": course_page
+        })
+
+
+# 机构介绍
+class OrgDescView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        course_page = "desc"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        all_course = course_org.course_set.all()
+        return render(request, "org-detail-desc.html", {
+            "all_course": all_course,
+            "course_org": course_org,
+            "course_page": course_page
         })
