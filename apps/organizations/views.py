@@ -34,11 +34,19 @@ class OrgView(View):
         except PageNotAnInteger:
             page = 1
 
+        # 对机构进行排序
+        sort = request.GET.get("sort", "")
+        if sort == "students":
+            all_orgs = all_orgs.order_by("-students")
+        elif sort == "courses":
+            all_orgs = all_orgs.order_by("-course_nums")
+
         p = Paginator(all_orgs, per_page=5, request=request)
         orgs = p.page(page)
         return render(request, "org-list.html", {
             "all_orgs": orgs,
             "org_data": org_data,
             "category": category,
-            "city_id":city_id
+            "city_id": city_id,
+            "sort": sort
         })
