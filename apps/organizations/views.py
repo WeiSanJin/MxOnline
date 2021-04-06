@@ -76,3 +76,20 @@ class AddAskView(View):
                 "status": "fail",
                 "msg": "添加出错"
             })
+
+
+# 机构首页
+class OrgHomeView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        # 课程、讲师
+        all_courses = course_org.course_set.all()[:3]
+        all_teacher = course_org.teacher_set.all()[:1]
+        return render(request, "org-detail-homepage.html", {
+            "all_courses": all_courses,
+            "all_teacher": all_teacher,
+            "course_org": course_org,
+        })
