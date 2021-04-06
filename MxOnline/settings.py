@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -131,7 +132,10 @@ STATICFILES_DIRS = [
 
 # 腾讯云短信配置
 
-
 # Redis配置
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
+
+# 上传图片配置
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
