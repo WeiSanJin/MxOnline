@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.views.generic.base import View
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect, JsonResponse
 
 from apps.organizations.models import CourseOrg, City
+from apps.organizations.form import AddAskForm
 
 
 class OrgView(View):
@@ -53,3 +55,24 @@ class OrgView(View):
             "sort": sort,
             "hot_orgs": hot_orgs
         })
+
+
+# 我要学习
+class AddAskView(View):
+    """
+    处理用户的咨询
+    """
+
+    def post(self, request, *args, **kwargs):
+        userask_form = AddAskForm(request.POST)
+        if userask_form.is_valid():
+            # 保存数据库
+            userask_form.save(commit=True)
+            return JsonResponse({
+                "status": "success"
+            })
+        else:
+            return JsonResponse({
+                "status": "fail",
+                "msg": "添加出错"
+            })

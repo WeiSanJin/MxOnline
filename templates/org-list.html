@@ -149,6 +149,7 @@
                     </div>
                     <p class="error company-tips" id="jsCompanyTips"></p>
                     <input class="btn" type="text" id="jsStayBtn" value="立即咨询 >"/>
+                    {% csrf_token %}
                 </form>
             </div>
 
@@ -156,17 +157,17 @@
                 <div class="head">授课机构排名</div>
 
                 {% for item in hot_orgs %}
-                <dl class="des">
-                    <dt class="num fl">{{ forloop.counter }}</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>{{ item.name }}</h1></a>
-                        <ul>
-                            <li class="first"><p class="pic9">课程数：<span> {{ item.course_nums }}</span></p>
-                                            <p class="c7">学习人数：<span> {{ item.students }}</span></p></li>
-                        </ul>
-                        <p>{{ item.address }}</p>
-                    </dd>
-                </dl>
+                    <dl class="des">
+                        <dt class="num fl">{{ forloop.counter }}</dt>
+                        <dd>
+                            <a href="/company/2/"><h1>{{ item.name }}</h1></a>
+                            <ul>
+                                <li class="first"><p class="pic9">课程数：<span> {{ item.course_nums }}</span></p>
+                                    <p class="c7">学习人数：<span> {{ item.students }}</span></p></li>
+                            </ul>
+                            <p>{{ item.address }}</p>
+                        </dd>
+                    </dl>
                 {% endfor %}
             </div>
         </div>
@@ -182,7 +183,7 @@
                     $.ajax({
                         cache: false,
                         type: "POST",
-                        url: "/org/add_ask/",
+                        url: "{% url 'org:add_ask' %}",
                         data: $('#jsStayForm').serialize(),
                         async: true,
                         success: function (data) {
