@@ -5,7 +5,7 @@
 # @Site :https://github.com/WeiSanJin
 import xadmin
 
-from apps.courses.models import Course, Lesson, Video, CourseResource
+from apps.courses.models import Course, Lesson, Video, CourseResource,CourseTag
 
 
 # 课程信息
@@ -17,6 +17,14 @@ class CourseAdmin(object):
                     'add_time']
     list_editable = ['degree', 'desc']
     search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
+
+
+# 课程标签
+class CourseTagAdmin(object):
+    list_filter = ['course', 'tag', 'add_time']
+    list_display = ['course', 'tag', 'add_time']
+    list_editable = ['course', 'tag']
+    search_fields = ['course', 'tag']
 
 
 # 章节信息
@@ -44,6 +52,7 @@ class CourseResourceAdmin(object):
 
 
 xadmin.site.register(Course, CourseAdmin)
+xadmin.site.register(CourseTag, CourseTagAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)

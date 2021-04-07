@@ -47,6 +47,20 @@ class Course(BaseModel):
     def lesson_nums(self):
         return self.lesson_set.all().count()
 
+
+# 课程标签
+class CourseTag(BaseModel):
+    course = models.ForeignKey(Course, verbose_name="课程", on_delete=models.CASCADE, )
+    tag = models.CharField(max_length=100, verbose_name="标签")
+
+    class Meta:
+        verbose_name = "课程标签"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.tag
+
+
 # 章节信息
 class Lesson(BaseModel):
     # 外键(ForeignKey)    on_delete：对应的外键数据被删除后，当前的数据应该怎么办

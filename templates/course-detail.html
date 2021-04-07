@@ -96,10 +96,10 @@
                         <div class="clear">
                             <ul>
                                 <li>
-                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course.course_org.course_set.all.count }}</span>
+                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ course.course_org.course_set.all.count }}</span>
                                 </li>
                                 <li>
-                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course.course_org.teachers.count }}</span>
+                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ course.course_org.teachers.count }}</span>
                                 </li>
                                 <li>所在地区：&nbsp;&nbsp;{{ course.course_org.address }}</li>
                                 <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
@@ -140,20 +140,22 @@
                 <div class="right layout">
                     <div class="head">相关课程推荐</div>
                     <div class="group_recommend">
-
-                        <dl>
-                            <dt>
-                                <a target="_blank" href="">
-                                    <img width="240" height="220" class="scrollLoading"
-                                         src="../media/courses/2016/11/540e57300001d6d906000338-240-135_mvvGYHL.jpg"/>
-                                </a>
-                            </dt>
-                            <dd>
-                                <a target="_blank" href=""><h2> django实战项目</h2></a>
-                                <span class="fl">学习时长：<i class="key">0</i></span>
-                            </dd>
-                        </dl>
-
+                        {% for related_courses in related_courses %}
+                            <dl>
+                                <dt>
+                                    <a target="_blank" href="{% url 'courses:detail' related_courses.id %}">
+                                        <img width="240" height="220" class="scrollLoading"
+                                             src="{{ related_courses.image.url }}"/>
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a target="_blank" href=""><h2
+                                            style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;"> {{ related_courses.name }}</h2>
+                                    </a>
+                                    <span class="fl">学习时长：<i class="key">{{ related_courses.learn_times }}</i></span>
+                                </dd>
+                            </dl>
+                        {% endfor %}
 
                     </div>
                 </div>
@@ -169,16 +171,16 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "/org/add_fav/",
+                url: "{% url 'op:fav' %}",
                 data: {'fav_id': fav_id, 'fav_type': fav_type},
                 async: true,
                 beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", "5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy");
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                 },
                 success: function (data) {
                     if (data.status == 'fail') {
                         if (data.msg == '用户未登录') {
-                            window.location.href = "login.html";
+                            window.location.href = "{% url 'login' %}";
                         } else {
                             alert(data.msg)
                         }
@@ -192,13 +194,13 @@
 
         $(document).ready(function () {
             $('#jsLeftBtn').on('click', function () {
-                add_fav($(this), 10, 1);
+                add_fav($(this), {{ course.id }}, 1);
             });
         });
 
         $(document).ready(function () {
             $('#jsRightBtn').on('click', function () {
-                add_fav($(this), 2, 2);
+                add_fav($(this), {{ course.course_org.id }}, 2);
             });
         });
 

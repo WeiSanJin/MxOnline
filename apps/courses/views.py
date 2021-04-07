@@ -3,7 +3,7 @@ from django.views.generic import View
 
 from pure_pagination import Paginator, PageNotAnInteger
 
-from apps.courses.models import Course
+from apps.courses.models import Course,CourseTag
 
 # 公开课列表
 from apps.operations.models import UserFavorite
@@ -56,8 +56,31 @@ class CourseDetailView(View):
             if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
                 has_fav_org = True
 
+        """ 通过课程的tag做课程的推荐
+        tag = course.tag
+        related_courses = []
+        if tag:
+            related_courses = Course.objects.filter(tag=tag).exclude(id__in=[course.id])[:3]
+        """
+
+        """ = tag_list = [tag.tag for tag in tags]
+        tag_list = []
+        for tag in tags:
+            tag_list.append(tag.tag)
+        """
+        # 当前课程所有的tag
+        tags = course.coursetag_set.all()
+        tag_list = [tag.tag for tag in tags]
+
+        # 查询和当前课程相同tag的记录，过滤当前课程
+        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course__id=course.id)
+        related_courses = set()
+        for course_tag in course_tags:
+            related_courses.add(course_tag.course)
+
         return render(request, "course-detail.html", {
             "course": course,
             "has_fav_course": has_fav_course,
-            "has_fav_org": has_fav_org
+            "has_fav_org": has_fav_org,
+            "related_courses": related_courses,
         })
