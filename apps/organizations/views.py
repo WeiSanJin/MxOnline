@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect, JsonResponse
+from pure_pagination import Paginator, PageNotAnInteger
+from django.http import JsonResponse
 
+from apps.operations.models import UserFavorite
 from apps.organizations.models import CourseOrg, City
 from apps.organizations.form import AddAskForm
 
@@ -86,6 +87,12 @@ class OrgHomeView(View):
         course_org.click_nums += 1
         course_org.save()
 
+        # 用户是否收藏
+        has_fav = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         # 课程、讲师
         all_courses = course_org.course_set.all()[:3]
         all_teacher = course_org.teacher_set.all()[:1]
@@ -93,7 +100,8 @@ class OrgHomeView(View):
             "all_courses": all_courses,
             "all_teacher": all_teacher,
             "course_org": course_org,
-            "course_page": course_page
+            "course_page": course_page,
+            "has_fav": has_fav
         })
 
 
@@ -105,11 +113,18 @@ class OrgTeacherView(View):
         course_org.click_nums += 1
         course_org.save()
 
+        # 用户是否收藏
+        has_fav = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         all_teacher = course_org.teacher_set.all()
         return render(request, "org-detail-teachers.html", {
             "all_teacher": all_teacher,
             "course_org": course_org,
-            "course_page": course_page
+            "course_page": course_page,
+            "has_fav": has_fav
         })
 
 
@@ -120,6 +135,12 @@ class OrgCourseView(View):
         course_org = CourseOrg.objects.get(id=int(org_id))
         course_org.click_nums += 1
         course_org.save()
+
+        # 用户是否收藏
+        has_fav = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
 
         all_course = course_org.course_set.all()
         # 对课程机构数据进行分页
@@ -134,7 +155,8 @@ class OrgCourseView(View):
         return render(request, "org-detail-course.html", {
             "all_course": courses,
             "course_org": course_org,
-            "course_page": course_page
+            "course_page": course_page,
+            "has_fav": has_fav
         })
 
 
@@ -146,9 +168,16 @@ class OrgDescView(View):
         course_org.click_nums += 1
         course_org.save()
 
+        # 用户是否收藏
+        has_fav = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         all_course = course_org.course_set.all()
         return render(request, "org-detail-desc.html", {
             "all_course": all_course,
             "course_org": course_org,
-            "course_page": course_page
+            "course_page": course_page,
+            "has_fav": has_fav
         })
