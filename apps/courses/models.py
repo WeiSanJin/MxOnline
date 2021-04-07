@@ -43,6 +43,9 @@ class Course(BaseModel):
     def __str__(self):
         return self.name
 
+    # 章节数量
+    def lesson_nums(self):
+        return self.lesson_set.all().count()
 
 # 章节信息
 class Lesson(BaseModel):

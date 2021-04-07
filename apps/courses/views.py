@@ -5,6 +5,9 @@ from pure_pagination import Paginator, PageNotAnInteger
 
 from apps.courses.models import Course
 
+# 公开课列表
+from apps.operations.models import UserFavorite
+
 
 class CourseListView(View):
     def get(self, request, *args, **kwargs):
@@ -34,4 +37,27 @@ class CourseListView(View):
             "all_courses": courses,
             "sort": sort,
             "hot_courses": hot_courses
+        })
+
+
+# 课程详情页面
+class CourseDetailView(View):
+    def get(self, request, course_id, *args, **kwargs):
+        course = Course.objects.get(id=int(course_id))
+        course.click_nums += 1
+        course.save()
+
+        # 用户是否收藏 fav_type:1(课程) 2(课程机构)
+        has_fav_course = False
+        has_fav_org = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
+                has_fav_course = True
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
+                has_fav_org = True
+
+        return render(request, "course-detail.html", {
+            "course": course,
+            "has_fav_course": has_fav_course,
+            "has_fav_org": has_fav_org
         })
