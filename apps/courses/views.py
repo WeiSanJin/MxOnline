@@ -11,6 +11,9 @@ class CourseListView(View):
         """获取课程列表信息"""
         all_courses = Course.objects.order_by("-add_time");
 
+        # 对授课机构进行排名
+        hot_courses = all_courses.order_by("-click_nums")[:3]
+
         # 最热门排序、参与人数排序
         sort = request.GET.get("sort", "")
         if sort == 'hot':
@@ -29,5 +32,6 @@ class CourseListView(View):
 
         return render(request, "course-list.html", {
             "all_courses": courses,
-            "sort": sort
+            "sort": sort,
+            "hot_courses": hot_courses
         })
