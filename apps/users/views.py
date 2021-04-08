@@ -10,7 +10,7 @@ from django.urls import reverse
 import redis
 
 from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
-    UploadImageForm
+    UploadImageForm, UserInfoForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
@@ -181,6 +181,16 @@ class UserInfoView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, "usercenter-info.html")
+
+    def post(self, request, *args, **kwargs):
+        user_info_form = UserInfoForm(request.POST, instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return JsonResponse({
+                "status": "success"
+            })
+        else:
+            return JsonResponse(user_info_form.errors)
 
 
 # 头像上传

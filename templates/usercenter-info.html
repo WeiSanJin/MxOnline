@@ -57,7 +57,7 @@
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female" {% if user.gender == 'female' %}checked="checked"{% endif %}>女</label>
                         </li>
                         <li class="p_infor_city">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
-                            <input type="text" name="address" id="address" placeholder="请输入你的地址" value="我来自火星"
+                            <input type="text" name="address" id="address" placeholder="请输入你的地址" value="{{ user.address }}"
                                    maxlength="10">
                             <i class="error-tips"></i>
                         </li>
@@ -69,6 +69,7 @@
                             <input type="button" id="jsEditUserBtn" value="保存">
                         </li>
                     </ul>
+                {% csrf_token %}
                 </form>
             </div>
         </div>
