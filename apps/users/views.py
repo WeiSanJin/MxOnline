@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth import authenticate, login, logout
@@ -168,3 +169,12 @@ class RegisterView(View):
                 "register_get_form": register_get_form,
                 "register_post_form": register_post_form
             })
+
+
+# 用户个人中心
+class UserInfoView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, "usercenter-info.html")
