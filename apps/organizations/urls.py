@@ -13,7 +13,7 @@ urlpatterns = [
 
     # path('<intt:org_id>/', OrgHomeView.as_view(), name="home")
     url(r'^(?P<org_id>\d+)/$', OrgHomeView.as_view(), name="home"),
-    url(r'^(?P<org_id>\d+)/teacher/$', OrgTeacherView.as_view(), name="teacher"),
-    url(r'^(?P<org_id>\d+)/course/$', OrgCourseView.as_view(), name="course"),
-    url(r'^(?P<org_id>\d+)/desc/$', OrgDescView.as_view(), name="desc"),
+    url(r'^teacher/(?P<org_id>\d+)/$', OrgTeacherView.as_view(), name="teacher"),
+    url(r'^course/(?P<org_id>\d+)/$', OrgCourseView.as_view(), name="course"),
+    url(r'^desc/(?P<org_id>\d+)/$', OrgDescView.as_view(), name="desc"),
 ]

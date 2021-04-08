@@ -9,7 +9,7 @@ from apps.courses.views import CourseListView, CourseDetailView, CourseLessonVie
 urlpatterns = [
     url(r'^list/$', CourseListView.as_view(), name="list"),
     url(r'^(?P<course_id>\d+)/$', CourseDetailView.as_view(), name="detail"),
-    url(r'^(?P<course_id>\d+)/lesson/$', CourseLessonView.as_view(), name="lesson"),
-    url(r'^(?P<course_id>\d+)/comment/$', CourseCommentView.as_view(), name="comment"),
-    url(r'^(?P<course_id>\d+)/video/(?P<video_id>\d+)$', VideoView.as_view(), name="video"),
+    url(r'^lesson/(?P<course_id>\d+)/$', CourseLessonView.as_view(), name="lesson"),
+    url(r'^comment/(?P<course_id>\d+)/$', CourseCommentView.as_view(), name="comment"),
+    url(r'^video/(?P<course_id>\d+)/(?P<video_id>\d+)$', VideoView.as_view(), name="video"),
 ]
