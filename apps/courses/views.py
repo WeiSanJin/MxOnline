@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.courses.models import Course, CourseTag, CourseResource
 
 # 公开课列表
-from apps.operations.models import UserFavorite, UserCourse
+from apps.operations.models import UserFavorite, UserCourse, CourseComments
 
 
 class CourseListView(View):
@@ -127,4 +127,36 @@ class CourseLessonView(LoginRequiredMixin, View):
             "course": course,
             "course_resources": course_resources,
             "related_courses": related_courses
+        })
+
+
+# 课程评论
+class CourseCommentView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, course_id, *args, **kwargs):
+        course = Course.objects.get(id=int(course_id))
+        course.click_nums += 1
+        course.save()
+
+        # 评论信息
+        comments = CourseComments.objects.filter(course=course).order_by("-add_time")
+
+        # 学习过该课程的所有同学
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by("course__click_nums")[:3]
+
+        related_courses = []
+        for item in all_courses:
+            if item.id != course.id:
+                related_courses.append(item.course)
+
+        course_resources = CourseResource.objects.filter(course=course)
+        return render(request, "course-comment.html", {
+            "course": course,
+            "course_resources": course_resources,
+            "related_courses": related_courses,
+            "comments": comments
         })
