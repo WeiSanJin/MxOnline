@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}{{ course.name }} - 章节信息{% endblock %}
+{% block title %}{{ video.name }} - {{ course.name }}{% endblock %}
 
 {% block custom_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/learn-less.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/course-comment.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/video-js.min.css' %}">
+
+    <style>
+        .video-js .vjs-big-play-button {
+            top: 50%;
+            left: 50%;
+        }
+    </style>
 {% endblock %}
 
-
+<!-- 面包屑 -->
 {% block custom_bread %}
     <section>
         <div class="wp">
@@ -19,46 +28,26 @@
                 <ul>
                     <li><a href="{% url 'index' %}">首页</a>></li>
                     <li><a href="{% url 'courses:list' %}">公开课程</a>></li>
-                    <li><a href="{% url 'courses:detail' 1 %}">课程详情</a>></li>
-                    <li>章节信息</li>
+                    <li><a href="{% url 'courses:detail' 1 %}">{{ course.name  }}</a>></li>
                 </ul>
             </div>
+            <h1 class="title">{{ video.name }}</h1>
         </div>
     </section>
 {% endblock %}
 
 {% block content %}
-    <div id="main">
-        <div class="course-infos">
-            <div class="w pr">
-                <div style="height: 15px" class="path">
-                </div>
-                <div class="hd">
-                    <h2 class="l" style="padding: 5px 20px;">{{ course.name }}</h2>
-                </div>
-                <div class="statics clearfix">
-                    <div class="static-item ">
-                        <span class="meta-value"><strong>{{ course.get_degree_display }}</strong></span>
-                        <span class="meta">难度</span>
-                        <em></em>
-                    </div>
-                    <div class="static-item static-time">
-                        <span class="meta-value">{{ course.learn_times }}分钟</span>
-                        <span class="meta">时长</span>
-                        <em></em>
-                    </div>
-                    <div class="static-item">
-                        <span class="meta-value"><strong>{{ course.students }}</strong></span>
-                        <span class="meta">学习人数</span>
-                        <em></em>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="course-info-main clearfix w has-progress">
+    <div style="width:1200px;margin-left: 340px">
+        <video id="example_video_1" class="video-js vjs-default-skin" controls preload="preload" width="1200"
+               poster="http://video-js.zencoder.com/oceans-clip.png"
+               data-setup="{}">
+            <source src="{{ video.url }}">
+        </video>
+    </div>
+    <div class="course-info-main clearfix w has-progress">
 
-            <div class="info-bar clearfix">
-                <div class="content-wrap clearfix">
+        <div class="info-bar clearfix">
+            <div class="content-wrap clearfix">
                     <div class="content">
                         <div class="mod-tab-menu">
                             <ul class="course-menu clearfix">
@@ -85,7 +74,7 @@
                                     <ul class="video">
                                         {% for vidio in lesson.video_set.all %}
                                             <li>
-                                                <a target="_blank" href='{% url 'courses:video' course.id vidio.id %}'
+                                                <a href='{% url 'courses:video' course.id vidio.id %}'
                                                    class="J-media-item studyvideo">{{ forloop.counter }}. {{ vidio.name }}
                                                     ({{ vidio.learn_times }}:00)
                                                     <i class="study-state"></i>
@@ -165,11 +154,18 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="clear"></div>
-
             </div>
+            <div class="clear"></div>
 
         </div>
+
     </div>
+    </div>
+{% endblock %}
+
+
+{% block custom_js %}
+    <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/video.min.js' %}" type="text/javascript"></script>
 {% endblock %}

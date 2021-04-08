@@ -82,7 +82,7 @@ class Video(BaseModel):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="章节")
     name = models.CharField(max_length=100, verbose_name="视频名")
     learn_times = models.IntegerField(verbose_name="学习时长(分钟数)", default=0)
-    url = models.CharField(max_length=200, verbose_name="访问地址")
+    url = models.CharField(max_length=1000, verbose_name="访问地址")
 
     class Meta:
         verbose_name = "视频"
