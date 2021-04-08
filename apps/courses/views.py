@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import View
-
 from pure_pagination import Paginator, PageNotAnInteger
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.courses.models import Course,CourseTag
+from apps.courses.models import Course, CourseTag, CourseResource
 
 # 公开课列表
-from apps.operations.models import UserFavorite
+from apps.operations.models import UserFavorite, UserCourse
 
 
 class CourseListView(View):
@@ -83,4 +83,48 @@ class CourseDetailView(View):
             "has_fav_course": has_fav_course,
             "has_fav_org": has_fav_org,
             "related_courses": related_courses,
+        })
+
+
+# 课程章节信息
+class CourseLessonView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, course_id, *args, **kwargs):
+        course = Course.objects.get(id=int(course_id))
+        course.click_nums += 1
+        course.save()
+
+        """
+            1. 用户和课程之间的关联
+            2. 对view进行login登录验证
+            3. 该课的同学还学过
+        """
+
+        # 查询用户是否已经关联了该课程
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses:
+            user_course = UserCourse(user=request.user, course=course)
+            user_course.save()
+
+            course.students += 1
+            course.save()
+
+        # 学习过该课程的所有同学
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by("course__click_nums")[:3]
+
+        # related_courses = [user_course.course for user_course in all_courses if user_course.course.id != course.id]
+        related_courses = []
+        for item in all_courses:
+            if item.id != course.id:
+                related_courses.append(item.course)
+
+        course_resources = CourseResource.objects.filter(course=course)
+        return render(request, "course-video.html", {
+            "course": course,
+            "course_resources": course_resources,
+            "related_courses": related_courses
         })

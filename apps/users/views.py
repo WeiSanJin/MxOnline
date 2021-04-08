@@ -6,7 +6,7 @@ from django.urls import reverse
 
 import redis
 
-from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm,RegisterPostForm
+from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
@@ -19,9 +19,11 @@ class LoginView(View):
         # 判断用户是否登录
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse("index"))
+        next = request.GET.get("next", "")
         login_form = DynamicLoginForm
         return render(request, "login.html", {
-            "login_form": login_form
+            "login_form": login_form,
+            "next": next
         })
 
     def post(self, request, *args, **kwargs):
@@ -47,6 +49,9 @@ class LoginView(View):
                 login(request, user)
                 # 登录成功之后返回页面
                 # return render(request, "index.html") # 登录成功后url无法重定向
+                next = request.GET.get("next", "")
+                if next:
+                    return HttpResponseRedirect(next)
                 return HttpResponseRedirect(reverse("index"))
             else:
                 # 未查询到用户
@@ -93,6 +98,16 @@ class SendSmsView(View):
 
 # 动态验证码登录
 class DynamicLoginView(View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("idnex"))
+        next = request.GET.get("next", "")
+        login_form = DynamicLoginForm()
+        return render(request, "login.html", {
+            "login_form": login_form,
+            "next": next
+        })
+
     def post(self, request, *args, **kwargs):
         # 验证用户输入是否正确
         login_form = DynamicLoginPostForm(request.POST)
@@ -153,4 +168,3 @@ class RegisterView(View):
                 "register_get_form": register_get_form,
                 "register_post_form": register_post_form
             })
-
