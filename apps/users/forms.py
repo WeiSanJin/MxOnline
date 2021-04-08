@@ -86,3 +86,10 @@ class RegisterPostForm(forms.Form):
             # 如果动态验证码不一致-->抛出异常
             raise forms.ValidationError("验证码不正确")
         return code
+
+
+# 用户头像上传
+class UploadImageForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["image"]

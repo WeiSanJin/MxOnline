@@ -1,3 +1,5 @@
+from turtledemo.penrose import f
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.base import View
@@ -7,7 +9,8 @@ from django.urls import reverse
 
 import redis
 
-from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm
+from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
+    UploadImageForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
@@ -178,3 +181,35 @@ class UserInfoView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, "usercenter-info.html")
+
+
+# 头像上传
+class UploadImageView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    # def save_file(self, file):
+    #     with open("F:/痞老板过年学编程/MxOnline/media/head_image/2021/04"):
+    #         for chunk in file.chunks():
+    #             f.write(chunk)
+
+    def post(self, request, *args, **kwargs):
+        # 处理用户上传的头像
+        # files = request.FILES["image"]
+        # self.save_file(files)
+
+        """问题
+            1. 如果同一个文件上传多次，相同名称的文件应该如何处理
+            2. 文件的保存路径应该写入到user
+            3. 还没有做表单验证
+        """
+        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        if image_form.is_valid():
+            image_form.save()
+            return JsonResponse({
+                "status": "success"
+            })
+        else:
+            return JsonResponse({
+                "status": "fail"
+            })
