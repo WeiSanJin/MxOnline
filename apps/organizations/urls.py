@@ -6,6 +6,7 @@
 from django.conf.urls import url
 
 from apps.organizations.views import OrgView, AddAskView, OrgHomeView, OrgTeacherView, OrgCourseView, OrgDescView
+from apps.organizations.views import TeacherListView
 
 urlpatterns = [
     url(r'^list/$', OrgView.as_view(), name="list"),
@@ -16,4 +17,7 @@ urlpatterns = [
     url(r'^teacher/(?P<org_id>\d+)/$', OrgTeacherView.as_view(), name="teacher"),
     url(r'^course/(?P<org_id>\d+)/$', OrgCourseView.as_view(), name="course"),
     url(r'^desc/(?P<org_id>\d+)/$', OrgDescView.as_view(), name="desc"),
+
+    # 讲师列表页
+    url(r'^teachers/$', TeacherListView.as_view(), name="teachers"),
 ]

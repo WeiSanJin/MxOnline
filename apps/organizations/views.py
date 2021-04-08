@@ -5,7 +5,7 @@ from pure_pagination import Paginator, PageNotAnInteger
 from django.http import JsonResponse
 
 from apps.operations.models import UserFavorite
-from apps.organizations.models import CourseOrg, City
+from apps.organizations.models import CourseOrg, City, Teacher
 from apps.organizations.form import AddAskForm
 
 
@@ -180,4 +180,36 @@ class OrgDescView(View):
             "course_org": course_org,
             "course_page": course_page,
             "has_fav": has_fav
+        })
+
+
+# 讲师列表
+class TeacherListView(View):
+    def get(self, request, *args, **kwargs):
+        all_teachers = Teacher.objects.all()
+        teacher_nums = all_teachers.count()
+
+        # 热门讲师
+        hot_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
+
+        # 讲师进行排序
+        sort = request.GET.get("sort", "")
+        if sort == "hot":
+            all_teachers = all_teachers.order_by("-click_nums")
+        elif sort == "":
+            all_teachers = all_teachers.order_by("-work_years")
+
+        # 对课程机构数据进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, per_page=4, request=request)
+        teachers = p.page(page)
+        return render(request, "teachers-list.html", {
+            "teachers": teachers,
+            "teacher_nums": teacher_nums,
+            "sort": sort,
+            "hot_teachers": hot_teachers
         })
