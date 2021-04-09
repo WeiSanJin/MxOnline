@@ -1,5 +1,4 @@
 from turtledemo.penrose import f
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.base import View
@@ -10,7 +9,7 @@ from django.urls import reverse
 import redis
 
 from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
-    UploadImageForm, UserInfoForm
+    UploadImageForm, UserInfoForm, ChangePwdForm, ChangeMobileForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
@@ -223,3 +222,32 @@ class UploadImageView(LoginRequiredMixin, View):
             return JsonResponse({
                 "status": "fail"
             })
+
+
+# 修改密码
+class ChangePwdView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def post(self, request, *args, **kwargs):
+        """
+            1. 表单验证是否为空，是否满足最小长度
+            2. 判断密码和确认密码是否一致
+            3. 如果密码一致进行密码修改
+            4. 如果密码不一致将表单验证错误信息返回
+        """
+        pwd_form = ChangePwdForm(request.POST)
+        if pwd_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            user = request.user
+            user.set_password(pwd1)
+            user.save()
+
+            # 修改密码后自动登录
+            # login(request, user)
+
+            return JsonResponse({
+                "status": "success"
+            })
+        else:
+            return JsonResponse(pwd_form.errors)

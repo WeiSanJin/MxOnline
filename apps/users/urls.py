@@ -5,11 +5,13 @@
 # @Site :https://github.com/WeiSanJin
 from django.conf.urls import url
 
-from apps.users.views import UserInfoView, UploadImageView
+from apps.users.views import UserInfoView, UploadImageView, ChangePwdView, ChangeMobileView
 
 urlpatterns = [
     # 用户个人中心
     url(r'^info/$', UserInfoView.as_view(), name="info"),
     # 头像上传
     url(r'^image/upload/$', UploadImageView.as_view(), name="image"),
+    # 修改密码
+    url(r'^update/pwd/$', ChangePwdView.as_view(), name="upload_pwd"),
 ]

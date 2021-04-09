@@ -76,7 +76,7 @@
     <div class="wp list personal_list">
         <div class="left">
             <ul>
-                <li class="active2"><a href="usercenter-info.html">个人资料</a></li>
+                <li class="active2"><a href="{% url 'users:info' %}">个人资料</a></li>
                 <li><a href="usercenter-mycourse.html">我的课程</a></li>
                 <li><a href="usercenter-fav-course.html">我的收藏</a></li>
                 <li>
@@ -148,6 +148,7 @@
                 <div class="button">
                     <input id="jsResetPwdBtn" type="button" value="提交"/>
                 </div>
+                {% csrf_token %}
             </form>
         </div>
     </div>
@@ -177,7 +178,7 @@
             <div class="button">
                 <input type="button" value="完成" id="jsChangePhoneBtn">
             </div>
-
+            {% csrf_token %}
         </form>
     </div>
     <div class="resetpassbox dialogbox" id="jsSetNewPwd">
@@ -202,6 +203,7 @@
                 <input type="hidden" name="mobile" id="jsInpResetMobil"/>
                 <input id="jsSetNewPwdBtn" type="button" value="提交"/>
             </div>
+            {% csrf_token %}
         </form>
     </div>
     <div class="forgetbox dialogbox">
@@ -227,6 +229,7 @@
                     <input type="hidden" name="sms_type" value="1">
                     <input id="jsFindPwdBtn" type="button" value="提交"/>
                 </div>
+                {% csrf_token %}
             </form>
         </div>
     </div>

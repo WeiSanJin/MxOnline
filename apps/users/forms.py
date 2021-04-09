@@ -100,3 +100,17 @@ class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ["nick_name", "gender", "birday", "address"]
+
+
+# 修改密码
+class ChangePwdForm(forms.Form):
+    password1 = forms.CharField(required=True, min_length=6)
+    password2 = forms.CharField(required=True, min_length=6)
+
+    def clean(self):
+        pwd1 = self.cleaned_data["password1"]
+        pwd2 = self.cleaned_data["password2"]
+
+        if pwd1 != pwd2:
+            raise forms.ValidationError("您输入的密码不一致")
+        return self.cleaned_data
