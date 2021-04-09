@@ -24,11 +24,12 @@ import xadmin
 
 from apps.users.views import LoginView, LogoutView, SendSmsView, DynamicLoginView, RegisterView
 from MxOnline.settings import MEDIA_ROOT
+from apps.operations.views import IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
-    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+    path('', IndexView.as_view(), name="index"),
     path('login/', LoginView.as_view(), name="login"),
     path('d_login/', csrf_exempt(DynamicLoginView.as_view()), name="d_login"),
     path('logout/', LogoutView.as_view(), name="logout"),

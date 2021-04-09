@@ -5,17 +5,17 @@
 # @Site :https://github.com/WeiSanJin
 import xadmin
 
-from apps.courses.models import Course, Lesson, Video, CourseResource,CourseTag
+from apps.courses.models import Course, Lesson, Video, CourseResource, CourseTag
 
 
 # 课程信息
 class CourseAdmin(object):
     list_filter = ['name', 'teacher__name', 'category', 'degree', 'learn_times', 'students', 'fav_num', 'click_nums',
                    'add_time']
-    list_display = ['name', 'teacher', 'category', 'degree', 'learn_times', 'students', 'fav_num', 'click_nums',
-                    'image',
+    list_display = ['name', 'teacher', 'category', 'degree', 'students', 'fav_num', 'click_nums',
+                    'is_classics', 'is_banner',
                     'add_time']
-    list_editable = ['degree', 'desc']
+    list_editable = ['degree', 'is_classics', 'is_banner', 'desc']
     search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
 
 

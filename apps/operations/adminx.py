@@ -5,7 +5,7 @@
 # @Site :https://github.com/WeiSanJin
 import xadmin
 
-from apps.operations.models import UserAsk, CourseComments, UserFavorite, UserMessage, UserCourse
+from apps.operations.models import UserAsk, CourseComments, UserFavorite, UserMessage, UserCourse, Banner
 
 
 # 用户咨询
@@ -48,8 +48,17 @@ class UserCourseAdmin(object):
     list_editable = ['user', 'course']
 
 
+# 轮播图
+class BannerAdmin(object):
+    search_fields = ['title', 'image', 'url', 'index']
+    list_display = ['title', 'image', 'url', 'index']
+    list_filter = ['title', 'image', 'url', 'index']
+    list_editable = ['title', 'image', 'url', 'index']
+
+
 xadmin.site.register(UserAsk, UserAskAdmin)
 xadmin.site.register(CourseComments, CourseCommentsAdmin)
 xadmin.site.register(UserFavorite, UserFavoriteAdmin)
 xadmin.site.register(UserMessage, UserMessageAskAdmin)
 xadmin.site.register(UserCourse, UserCourseAdmin)
+xadmin.site.register(Banner, BannerAdmin)
