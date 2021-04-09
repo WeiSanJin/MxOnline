@@ -5,7 +5,7 @@
     <section>
         <div class="wp">
             <ul class="crumbs">
-                <li><a href="index.html">首页</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
                 <li>课程机构</li>
             </ul>
         </div>
@@ -15,7 +15,7 @@
 {% block content %}
     <section>
         <div class="wp butler_list_box list">
-            <div class='left'>
+            <div class='left w930'>
                 <div class="listoptions">
                     <ul>
                         <li>
@@ -50,7 +50,7 @@
                     </ul>
                 </div>
                 <div class="all">共<span class="key">{{ org_data.nums }}</span>家</div>
-                <div class="butler_list company list">
+                <div class="butler_list company list w100">
                     <div class="layout">
                         <div class="head">
                             <ul class="tab_header">
@@ -99,7 +99,7 @@
                                         </li>
                                     </ul>
                                 </dd>
-                                <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><br/>联系<br/>服务</div>
+                                <div class="buy start_groupbuy jsShowPerfect2 right_80" data-id="22"><br/>联系<br/>服务</div>
                             </dl>
                         {% endfor %}
 

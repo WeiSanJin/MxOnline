@@ -314,3 +314,8 @@ $(function () {
 
 
 });
+
+// 设置动态登录验证码placeholder
+(function setPlaceholder() {
+    $("#id_captcha_1").attr("placeholder", '请输入验证码')
+}());

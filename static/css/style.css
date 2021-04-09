@@ -255,6 +255,9 @@ caption {
     width: 68px;
 }
 
+.mtop{
+    margin-top: 20px;
+}
 .dizhi_t .dizhi_t_2 {
     width: 286px;
     height: auto;
@@ -528,7 +531,7 @@ caption {
 
 .header .top .msg-num {
     float: right;
-    margin-right: 120px;
+    /*margin-right: 120px;*/
     height: 38px;
     width: 60px;
     background: url(../images/laba.png) no-repeat 0 center;
@@ -1373,7 +1376,9 @@ textarea:focus {
     background: #717171;
     cursor: pointer;
 }
-
+.w100{
+    width: 100% !important;
+}
 /*.searchbox .selectContainer{margin-top: 0 !important;}*/
 /*.searchbox .selectContainer p{line-height: 37px !important;}*/
 /*#search_type{height: 37px;line-height: 37px;width: 90px !important;}*/
@@ -3266,14 +3271,14 @@ footer .footer .line {
 }
 
 .butler_list_box .left {
-    width: 945px;
+    width: 890px;
     height: auto;
     overflow: hidden;
     float: left;
 }
 
 .butler_list_box .right {
-    width: 210px;
+    width: 280px;
     height: auto;
     overflow: hidden;
     float: right;
@@ -3294,7 +3299,7 @@ footer .footer .line {
 }
 
 .butler_list {
-    width: 943px;
+    width: 880px;
     height: auto;
     overflow: hidden;
     border: 1px solid #e3e3e3;
@@ -3305,7 +3310,7 @@ footer .footer .line {
 }
 
 .butler_list .des {
-    width: 903px;
+    width: 850px;
     height: 160px;
     border-bottom: 1px solid #e3e3e3;
     padding: 20px;
@@ -3343,6 +3348,12 @@ footer .footer .line {
     height: 25px;
     line-height: 25px;
     clear: both;
+}
+.messagelist .butler_lists {
+    width: 943px;
+    height: auto;
+    overflow: hidden;
+    border: 1px solid #e3e3e3;
 }
 
 .butler_list_box dt .btn div {
@@ -3388,7 +3399,7 @@ footer .footer .line {
 
 .butler_list dd {
     margin-left: 20px;
-    width: 770px;
+    width: 700px;
     float: right;
     margin-top: 10px;
     height: 95px;
@@ -3452,7 +3463,9 @@ footer .footer .line {
 .butler_list .cont .c7, .companyranklist .cont .c8 {
     background: url(../images/pic7.png) no-repeat left center;
 }
-
+.c7_1{
+    padding-left: 20px !important;
+}
 .butler_list .cont .c8, .companyranklist .cont .c7 {
     background: url(../images/share_c8.png) no-repeat left center;
 }
@@ -3482,7 +3495,18 @@ footer .footer .line {
     font-size: 16px;
     cursor: pointer;
 }
-
+.right_80{
+    right: 80px !important;
+}
+.w930{
+    width: 930px !important;
+}
+.w700{
+    width: 700px !important;
+}
+.w226{
+    width: 226px !important;
+}
 .butler_list .buy:hover, .buyservice:hover {
     background: #717171;
     color: #fff;
@@ -3508,7 +3532,7 @@ footer .footer .line {
     color: #fffc00;
     text-align: center;
     display: block;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 10px;
 }
 
@@ -3520,7 +3544,7 @@ footer .footer .line {
 }
 
 .butler_list_box .right dd {
-    width: 80px;
+    /*width: 80px;*/
     height: 50px;
     margin-top: 10px;
     line-height: 150%;
@@ -5331,8 +5355,8 @@ footer .footer .line {
 .companycenter .group_list .box {
     height: 300px;
     position: relative;
-    margin: 30px 10px;
-    width: 214px !important;
+    margin: 30px 4px;
+    width: 214px;
 }
 
 .companycenter .group_list .box .des {

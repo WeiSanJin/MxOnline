@@ -28,8 +28,10 @@
                     {% if request.user.is_authenticated %}
                         <div class="personal">
                             <dl class="user fr">
-                                <dd>{% if user.nick_name %}{{ user.nick_name }}{% else %}{{ user.username }}{% endif %}<img class="down fr" src="/static/images/top_down.png"/></dd>
-                                <dt><img width="20" height="20" src="{{user.image.url}}"/>
+                                <dd>{% if user.nick_name %}{{ user.nick_name }}{% else %}
+                                    {{ user.username }}{% endif %}<img class="down fr"
+                                                                       src="{% static 'images/top_down.png' %}"/></dd>
+                                <dt><img width="20" height="20" src="{{ user.image.url }}"/>
                                 </dt>
                             </dl>
                             <div class="userdetail">
@@ -139,7 +141,7 @@
     </div>
     <div class="resetpwdbox dialogbox" id="jsResetDialog">
         <h1>修改密码</h1>
-        <div class="close jsCloseDialog"><img src="{% static '../images/dig_close.png' %}"/></div>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
         <div class="cont">
             <form id="jsResetPwdForm" autocomplete="off">
                 <div class="box">
@@ -162,7 +164,7 @@
     <!--手机修改-->
     <div class="dialogbox changephone changephone1" id="jsChangePhoneDialog" style="display: none; margin-top: 81px;">
         <h1>修改手机号码</h1>
-        <div class="close jsCloseDialog"><img src="{% static '../images/dig_close.png' %}"></div>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"></div>
         <p>请输入新的手机号码</p>
         <form id="jsChangePhoneForm" autocomplete="off">
             <div class="box">
@@ -185,7 +187,7 @@
     </div>
     <div class="resetpassbox dialogbox" id="jsSetNewPwd">
         <h1>重新设置密码</h1>
-        <div class="close jsCloseDialog"><img src="{% static '../images/dig_close.png' %}"/></div>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
         <p class="green">请输入新密码</p>
         <form id="jsSetNewPwdForm">
             <div class="box">
@@ -210,7 +212,7 @@
     </div>
     <div class="forgetbox dialogbox">
         <h1>忘记密码</h1>
-        <div class="close jsCloseDialog"><img src="{% static '../images/dig_close.png' %}"/></div>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
         <div class="cont">
             <form id="jsFindPwdForm" autocomplete="off">
                 <div class="box">

@@ -28,14 +28,16 @@
                     {% if request.user.is_authenticated %}
                         <div class="personal">
                             <dl class="user fr">
-                                <dd>{% if user.nick_name %}{{ user.nick_name }}{% else %}{{ user.username }}{% endif %}<img class="down fr" src="/static/images/top_down.png"/></dd>
-                                <dt><img width="20" height="20" src="{{user.image.url}}"/>
+                                <dd>{% if user.nick_name %}{{ user.nick_name }}{% else %}
+                                    {{ user.username }}{% endif %}<img class="down fr"
+                                                                       src="{% static 'images/top_down.png' %}"/></dd>
+                                <dt><img width="20" height="20" src="{{ user.image.url }}"/>
                                 </dt>
                             </dl>
                             <div class="userdetail">
                                 <dl>
                                     <dt><img width="80" height="80"
-                                             src="{{user.image.url}}"/>
+                                             src="{{ user.image.url }}"/>
                                     </dt>
                                     <dd>
                                         <h2>{{ user.nick_name }}</h2>
@@ -48,6 +50,9 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="{% url 'users:message' %}">
+                            <div class="msg-num"><span id="MsgNum">{{ unread_nums }}</span></div>
+                        </a>
                     {% else %}
                         <a style="color:white" class="fr registerbtn" href="{% url 'register' %}">注册</a>
                         <a style="color:white" class="fr loginbtn" href="{% url 'login' %}">登录</a>
@@ -79,23 +84,25 @@
                 <div class="nav">
                     <div class="wp">
                         <ul>
-                            <li><a href="{% url 'index' %}">首页</a></li>
-                            <li>
-                                <a href="">
+                            <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'index' %}">首页</a>
+                            </li>
+                            <li class="{% if request.path|slice:'8' == '/courses' %}active{% endif %}">
+                                <a href="{% url 'courses:list' %}">
                                     公开课<img class="hot" src="{% static 'images/nav_hot.png' %}">
                                 </a>
                             </li>
-                            <li>
-                                <a href="">授课教师</a>
+                            <li class="{% if request.path|slice:'13' == '/org/teachers' %}active{% endif %}">
+                                <a href="{% url 'org:teachers' %}">授课教师</a>
                             </li>
-                            <li class="active"><a href="{% url 'org:list' %}">授课机构</a></li>
+                            <li class="{% if request.path|slice:'9' == '/org/list' %}active{% endif %}"><a
+                                    href="{% url 'org:list' %}">授课机构</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
 
             <div class="middle companyheader">
-                <div class="wp">
+                <div class="wp mtop">
                     <img class="fl" style="width: 112px;height: 103px" src="{{ MEDIA_URL }}{{ course_org.image }}"/>
                     <div class="head fl">
                         <h1>
@@ -253,21 +260,25 @@
             $('.recordbox2').show();
         });
 
-        $('.imgslide').unslider({
-            speed: 500,               //  The speed to animate each slide (in milliseconds)
-            delay: 3000,              //  The delay between slide animations (in milliseconds)
-            complete: function () {
-            },  //  A function that gets called after every slide animation
-            keys: true,               //  Enable keyboard (left, right) arrow shortcuts
-            dots: true,               //  Display dot navigation
-            fluid: false              //  Support responsive design. May break non-responsive designs
-        });
-        var unslider = $('.imgslide').unslider();
-        $('.unslider-arrow').click(function () {
-            var fn = this.className.split(' ')[1];
-            unslider.data('unslider')[fn]();
-        });
-    });
+        {#$('.imgslide').unslider({#}
+        {#    speed: 500,               //  The speed to animate each slide (in milliseconds)#}
+        {#    delay: 3000,              //  The delay between slide animations (in milliseconds)#}
+        {#    complete: function () {#}
+        {#    },  //  A function that gets called after every slide animation#}
+        {#    keys: true,               //  Enable keyboard (left, right) arrow shortcuts#}
+        {#    dots: true,               //  Display dot navigation#}
+        {#    fluid: false              //  Support responsive design. May break non-responsive designs#}
+        {#});
+    #}
+    {#var unslider = $('.imgslide').unslider();#}
+    {#$('.unslider-arrow').click(function () {#}
+    {#    var fn = this.className.split(' ')[1];#}
+    {#    unslider.data('unslider')[fn]();#}
+    {#})
+    ;
+    #}
+    })
+    ;
 </script>
 
 </body>
