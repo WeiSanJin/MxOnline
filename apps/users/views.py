@@ -14,6 +14,7 @@ from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
 from apps.users.models import UserProfile
+from apps.operations.models import UserCourse
 
 
 # 登录
@@ -273,9 +274,21 @@ class ChangeMobileView(LoginRequiredMixin, View):
             user.mobile = mobile
             user.username = mobile
             user.save()
-            login(request,user)
+            login(request, user)
             return JsonResponse({
                 "status": "success"
             })
         else:
             return JsonResponse(mobile_form.errors)
+
+
+# 我的课程
+class MyCourseView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        my_course = UserCourse.objects.filter(user=request.user)
+        return render(request, 'usercenter-mycourse.html',{
+            "my_course": my_course
+        })

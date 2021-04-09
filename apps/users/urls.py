@@ -5,7 +5,7 @@
 # @Site :https://github.com/WeiSanJin
 from django.conf.urls import url
 
-from apps.users.views import UserInfoView, UploadImageView, ChangePwdView, ChangeMobileView
+from apps.users.views import UserInfoView, UploadImageView, ChangePwdView, ChangeMobileView, MyCourseView
 
 urlpatterns = [
     # 用户个人中心
@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^update/pwd/$', ChangePwdView.as_view(), name="upload_pwd"),
     # 修改手机号码
     url(r'^update/mobile/$', ChangeMobileView.as_view(), name="update_mobile"),
+    # 我的课程
+    url(r'^mycourse/$', MyCourseView.as_view(), name="mycourse"),
 ]
