@@ -52,13 +52,17 @@ class UserFavorite(BaseModel):
 
 # 用户消息
 class UserMessage(BaseModel):
-    user = models.IntegerField(default=0, verbose_name="接收用户")
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="接收用户")
     message = models.CharField(max_length=500, verbose_name="消息内容")
     has_read = models.BooleanField(default=False, verbose_name="是否已读")
 
     class Meta:
         verbose_name = "用户消息"
         verbose_name_plural = verbose_name
+
+    # 未读消息数量
+    def unread_nums(self):
+        return self.usercourse_set.filter(has_read=False).count()
 
     def __str__(self):
         return self.message

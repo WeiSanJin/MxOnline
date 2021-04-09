@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 
 from apps.users.views import UserInfoView, UploadImageView, ChangePwdView, ChangeMobileView, MyFavOrgView, \
-    MyFavTeacherView, MyFavCourseView
+    MyFavTeacherView, MyFavCourseView, MyMessageView
 
 urlpatterns = [
     # 用户个人中心
@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'^myfav_org/$', MyFavOrgView.as_view(), name="myfav_org"),
     url(r'^myfav_teacher/$', MyFavTeacherView.as_view(), name="myfav_teachers"),
     url(r'^myfav_course/$', MyFavCourseView.as_view(), name="myfav_course"),
+
+    # 我的消息
+    url(r'^message/$', MyMessageView.as_view(), name="message"),
 ]

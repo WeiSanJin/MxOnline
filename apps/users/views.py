@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
+from pure_pagination import Paginator, PageNotAnInteger
 import redis
 
 from apps.utils.random_str import generate_random
@@ -14,7 +15,7 @@ from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
 from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
     UploadImageForm, UserInfoForm, ChangePwdForm, ChangeMobileForm
 from apps.users.models import UserProfile
-from apps.operations.models import UserCourse, UserFavorite
+from apps.operations.models import UserCourse, UserFavorite, UserMessage
 from apps.organizations.models import Teacher, CourseOrg
 from apps.courses.models import Course
 
@@ -353,3 +354,38 @@ class MyFavCourseView(LoginRequiredMixin, View):
             "course_list": course_list,
             "current_page": current_page
         })
+
+
+# 我的消息
+class MyMessageView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        messages = UserMessage.objects.filter(user=request.user)
+        for message in messages:
+            message.has_read = True
+            message.save()
+
+        # 对讲师数据进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(messages, per_page=5, request=request)
+        messages = p.page(page)
+        return render(request, "usercenter-message.html", {
+            "messages": messages
+        })
+
+
+# 全局消息数量
+def message_nums(request):
+    """
+    Add media-related context variables to the context.
+    """
+    if request.user.is_authenticated:
+        return {'unread_nums': request.user.usermessage_set.filter(has_read=False).count()}
+    else:
+        return {}
