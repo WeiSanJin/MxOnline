@@ -179,7 +179,10 @@ class UserInfoView(LoginRequiredMixin, View):
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
-        return render(request, "usercenter-info.html")
+        captcha_form = RegisterGetForm()
+        return render(request, "usercenter-info.html", {
+            "captcha_form": captcha_form
+        })
 
     def post(self, request, *args, **kwargs):
         user_info_form = UserInfoForm(request.POST, instance=request.user)
@@ -251,3 +254,28 @@ class ChangePwdView(LoginRequiredMixin, View):
             })
         else:
             return JsonResponse(pwd_form.errors)
+
+
+# 修改手机号码
+class ChangeMobileView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def post(self, request, *args, **kwargs):
+        mobile_form = ChangeMobileForm(request.POST)
+        if mobile_form.is_valid():
+            mobile = request.POST.get("mobile", "")
+            if UserProfile.objects.filter(mobile=mobile):
+                return JsonResponse({
+                    "mobile": "该手机号码已经被占用"
+                })
+            user = request.user
+            user.mobile = mobile
+            user.username = mobile
+            user.save()
+            login(request,user)
+            return JsonResponse({
+                "status": "success"
+            })
+        else:
+            return JsonResponse(mobile_form.errors)

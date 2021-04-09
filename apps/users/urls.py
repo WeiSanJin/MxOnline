@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^image/upload/$', UploadImageView.as_view(), name="image"),
     # 修改密码
     url(r'^update/pwd/$', ChangePwdView.as_view(), name="upload_pwd"),
+    # 修改手机号码
+    url(r'^update/mobile/$', ChangeMobileView.as_view(), name="update_mobile"),
 ]

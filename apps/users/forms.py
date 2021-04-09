@@ -114,3 +114,21 @@ class ChangePwdForm(forms.Form):
         if pwd1 != pwd2:
             raise forms.ValidationError("您输入的密码不一致")
         return self.cleaned_data
+
+
+# 修改手机号码
+class ChangeMobileForm(forms.Form):
+    mobile = forms.CharField(required=True, min_length=11, max_length=11)
+    code = forms.CharField(required=True, min_length=4, max_length=4)
+
+    # 只对code字段进行验证
+    def clean_code(self):
+        mobile = self.data.get("mobile")
+        code = self.data.get("code")
+        # 对动态验证码进行验证
+        r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, charset="utf8", decode_responses=True)
+        redis_code = r.get(str(mobile))
+        if code != redis_code:
+            # 如果动态验证码不一致-->抛出异常
+            raise forms.ValidationError("验证码不正确")
+        return self.cleaned_data

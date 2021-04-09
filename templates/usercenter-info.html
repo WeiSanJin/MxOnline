@@ -45,31 +45,37 @@
                 <form class="perinform" id="jsEditUserForm" autocomplete="off">
                     <ul class="right">
                         <li>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：
-                            <input type="text" name="nick_name" id="nick_name" value="{{ user.nick_name|default_if_none:'' }}" maxlength="10">
+                            <input type="text" name="nick_name" id="nick_name"
+                                   value="{{ user.nick_name|default_if_none:'' }}" maxlength="10">
                             <i class="error-tips"></i>
                         </li>
                         <li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
-                            <input type="text" id="birth_day" name="birday" value="{{ user.birday|default_if_none:''|date:'Y-m-d' }}" readonly="readonly"/>
+                            <input type="text" id="birth_day" name="birday"
+                                   value="{{ user.birday|default_if_none:''|date:'Y-m-d' }}" readonly="readonly"/>
                             <i class="error-tips"></i>
                         </li>
                         <li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="male" {% if user.gender == 'male' %}checked="checked"{% endif %}>男</label>
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female" {% if user.gender == 'female' %}checked="checked"{% endif %}>女</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="male"
+                                                                        {% if user.gender == 'male' %}checked="checked"{% endif %}>男</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female"
+                                                                              {% if user.gender == 'female' %}checked="checked"{% endif %}>女</label>
                         </li>
                         <li class="p_infor_city">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
-                            <input type="text" name="address" id="address" placeholder="请输入你的地址" value="{{ user.address }}"
+                            <input type="text" name="address" id="address" placeholder="请输入你的地址"
+                                   value="{{ user.address }}"
                                    maxlength="10">
                             <i class="error-tips"></i>
                         </li>
                         <li>手&nbsp;&nbsp;机&nbsp;&nbsp;号：
-                            <input class="borderno" type="text" name="mobile" readonly="readonly" value="{{ user.mobile }}">
+                            <input class="borderno" type="text" name="mobile" readonly="readonly"
+                                   value="{{ user.mobile }}">
                             <span class="changeemai_btn green changephone-color">[修改]</span>
                         </li>
                         <li class="button heibtn">
                             <input type="button" id="jsEditUserBtn" value="保存">
                         </li>
                     </ul>
-                {% csrf_token %}
+                    {% csrf_token %}
                 </form>
             </div>
         </div>
@@ -78,6 +84,9 @@
 
 {% block custom_js %}
     <script type="text/javascript">
+        (function setPlaceholder() {
+            $("#id_captcha_1").attr("placeholder", '请输入验证码')
+        }());
         $(document).ready(function () {
             $('.jsDeleteFav_course').on('click', function () {
                 var _this = $(this),
