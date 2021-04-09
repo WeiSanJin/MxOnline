@@ -1,4 +1,4 @@
-{% extends 'usercenter-bese.html' %}
+{% extends 'usercenter-base.html' %}
 {% load staticfiles %}
 {% block title %}我的课程- 慕学在线网{% endblock %}
 
@@ -29,13 +29,14 @@
             <div class="companycenter">
                 <div class="group_list brief">
                     {% for user_course in user.usercourse_set.all %}
-                        <div class="module1_5 box">
+                        <div class="module1_5 box w226">
                             <a href="{% url 'courses:detail' user_course.course.id %}">
                                 <img width="214" height="190" class="scrollLoading"
                                      src="{{ user_course.course.image.url }}"/>
                             </a>
                             <div class="des">
-                                <a href="{% url 'courses:detail' user_course.course.id %}"><h2>{{ user_course.course.name }}</h2></a>
+                                <a href="{% url 'courses:detail' user_course.course.id %}">
+                                    <h2>{{ user_course.course.name }}</h2></a>
                                 <span class="fl">课时：<i class="key">{{ user_course.course.lesson_nums }}</i></span>
                                 <span class="fr">学习人数：{{ user_course.course.students }}</span>
                             </div>

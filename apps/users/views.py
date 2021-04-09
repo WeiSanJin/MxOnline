@@ -8,13 +8,15 @@ from django.urls import reverse
 
 import redis
 
-from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
-    UploadImageForm, UserInfoForm, ChangePwdForm, ChangeMobileForm
 from apps.utils.random_str import generate_random
 from apps.utils.TencentSendSms import send_sms_single
 from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
+from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
+    UploadImageForm, UserInfoForm, ChangePwdForm, ChangeMobileForm
 from apps.users.models import UserProfile
-from apps.operations.models import UserCourse
+from apps.operations.models import UserCourse, UserFavorite
+from apps.organizations.models import Teacher, CourseOrg
+from apps.courses.models import Course
 
 
 # 登录
@@ -294,3 +296,60 @@ class MyCourseView(LoginRequiredMixin, View):
             "my_course": my_course
         })
 """
+
+
+# 我的收藏机构
+class MyFavOrgView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        current_page = "myfav_org"
+        org_list = []
+        fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type=2)
+        for fav_org in fav_orgs:
+            org = CourseOrg.objects.get(id=fav_org.fav_id)
+            org_list.append(org)
+        return render(request, "usercenter-fav-org.html", {
+            "org_list": org_list,
+            "current_page": current_page
+        })
+
+
+# 我的收藏讲师
+class MyFavTeacherView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        current_page = "myfav_teachers"
+        teacher_list = []
+        fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        for fav_teacher in fav_teachers:
+            teacher = Teacher.objects.get(id=fav_teacher.fav_id)
+            teacher_list.append(teacher)
+        return render(request, "usercenter-fav-teacher.html", {
+            "teacher_list": teacher_list,
+            "current_page": current_page
+        })
+
+
+# 我的收藏课程
+class MyFavCourseView(LoginRequiredMixin, View):
+    # 用户要进入此方法前必须是登录状态
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        current_page = "myfav_course"
+        course_list = []
+        fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        for fav_course in fav_courses:
+            try:
+                course = Course.objects.get(id=fav_course.fav_id)
+                course_list.append(course)
+            except Course.DoesNotExist as e:
+                pass
+        return render(request, "usercenter-fav-course.html", {
+            "course_list": course_list,
+            "current_page": current_page
+        })

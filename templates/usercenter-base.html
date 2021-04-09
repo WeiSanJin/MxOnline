@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'js/plugins/queryCity/css/cityLayout.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/lq.datetimepick.css' %}"/>
     {% block custom_css %}
+        <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
     {% endblock %}
-    <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
 
 </head>
 <body>
@@ -76,9 +76,12 @@
     <div class="wp list personal_list">
         <div class="left">
             <ul>
-                <li class="{% if request.path == '/users/info/' %}active2{% endif %}"><a href="{% url 'users:info' %}">个人资料</a></li>
-                <li class="{% if request.path == '/users/mycourse/' %}active2{% endif %}"><a href="{% url 'users:mycourse' %}">我的课程</a></li>
-                <li><a href="usercenter-fav-course.html">我的收藏</a></li>
+                <li class="{% if request.path == '/users/info/' %}active2{% endif %}"><a href="{% url 'users:info' %}">个人资料</a>
+                </li>
+                <li class="{% if request.path == '/users/mycourse/' %}active2{% endif %}"><a
+                        href="{% url 'users:mycourse' %}">我的课程</a></li>
+                <li class="{% if request.path|slice:'12' == '/users/myfav' %}active2{% endif %}"><a
+                        href="{% url 'users:myfav_org' %}">我的收藏</a></li>
                 <li>
                     <a href="usercenter-message.html" style="position: relative;">
                         我的消息
