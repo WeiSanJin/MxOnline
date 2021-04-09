@@ -28,7 +28,7 @@
         <div class="personal_des permessage">
             <div class="companycenter">
                 <div class="group_list brief">
-                    {% for user_course in my_course %}
+                    {% for user_course in user.usercourse_set.all %}
                         <div class="module1_5 box">
                             <a href="{% url 'courses:detail' user_course.course.id %}">
                                 <img width="214" height="190" class="scrollLoading"

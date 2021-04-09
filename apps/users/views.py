@@ -282,6 +282,7 @@ class ChangeMobileView(LoginRequiredMixin, View):
             return JsonResponse(mobile_form.errors)
 
 
+"""代码不够简洁，用TemplateView代替
 # 我的课程
 class MyCourseView(LoginRequiredMixin, View):
     # 用户要进入此方法前必须是登录状态
@@ -289,6 +290,7 @@ class MyCourseView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         my_course = UserCourse.objects.filter(user=request.user)
-        return render(request, 'usercenter-mycourse.html',{
+        return render(request, 'usercenter-mycourse.html', {
             "my_course": my_course
         })
+"""
