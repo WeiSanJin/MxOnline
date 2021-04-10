@@ -59,7 +59,7 @@ class NewCourseAdmin(object):
                    'add_time']
     list_display = ['name', 'teacher', 'category', 'degree', 'students', 'fav_num', 'click_nums',
                     'is_classics', 'is_banner',
-                    'add_time']
+                    'show_image', 'go_to', 'add_time']
     list_editable = ['degree', 'is_classics', 'is_banner', 'desc']
     search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
 

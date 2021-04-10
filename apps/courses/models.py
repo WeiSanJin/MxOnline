@@ -49,6 +49,17 @@ class Course(BaseModel):
     def lesson_nums(self):
         return self.lesson_set.all().count()
 
+    def show_image(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<img src='{}' style='width: 200px;'>".format(self.image.url))
+
+    show_image.short_description = "图片"
+
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='/courses/{}' target='_blank'>跳转</a>".format(self.id))
+    go_to.short_description = "跳转"
+
 
 # 课程标签
 class CourseTag(BaseModel):
