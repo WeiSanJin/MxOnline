@@ -48,17 +48,18 @@
                                 <li><span class="pram word3">课程类别：</span><span title="">{{ course.category }}</span>
                                 </li>
                                 <li class="piclist"><span class="pram word4">学习用户：</span>
-
-                                    <span class="pic"><img width="40" height="40"
-                                                           src="../media/image/2016/12/default_big_14.png"/></span>
-
+                                    {% for user_course in course.usercourse_set.all|slice:5 %}
+                                        <span class="pic"><img width="40" height="40"
+                                                               src="{{ user_course.user.image.url }}"/></span>
+                                    {% endfor %}
                                 </li>
                             </ul>
                             <div class="btns">
                                 <div class="btn colectgroupbtn" id="jsLeftBtn">
                                     {% if has_fav_course %}已收藏{% else %}收藏{% endif %}
                                 </div>
-                                <div class="buy btn"><a style="color: white;display: block;" href="{% url 'courses:lesson' course.id %}">开始学习</a></div>
+                                <div class="buy btn"><a style="color: white;display: block;"
+                                                        href="{% url 'courses:lesson' course.id %}">开始学习</a></div>
                             </div>
                         </div>
                         <div class="group-share-box">

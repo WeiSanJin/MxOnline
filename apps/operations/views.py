@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import JsonResponse
+from django.contrib.auth.backends import ModelBackend
+from django.db.models import Q
 
-from apps.operations.models import UserFavorite, CourseComments, Banner
 from apps.operations.form import UserFavForm, CommentsForm
+from apps.users.models import UserProfile
 from apps.courses.models import Course
+from apps.operations.models import UserFavorite, CourseComments, Banner
 from apps.organizations.models import CourseOrg, Teacher
 
 

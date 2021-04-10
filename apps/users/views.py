@@ -1,5 +1,8 @@
 from turtledemo.penrose import f
+
+from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth import authenticate, login, logout
@@ -15,7 +18,7 @@ from MxOnline.settings import TENCENT_Template_ID, REDIS_HOST, REDIS_PORT
 from apps.users.forms import LoginForm, DynamicLoginForm, DynamicLoginPostForm, RegisterGetForm, RegisterPostForm, \
     UploadImageForm, UserInfoForm, ChangePwdForm, ChangeMobileForm
 from apps.users.models import UserProfile
-from apps.operations.models import UserCourse, UserFavorite, UserMessage
+from apps.operations.models import UserCourse, UserFavorite, UserMessage, Banner
 from apps.organizations.models import Teacher, CourseOrg
 from apps.courses.models import Course
 
@@ -26,11 +29,14 @@ class LoginView(View):
         # 判断用户是否登录
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse("index"))
+
+        banners = Banner.objects.all()[:3]
         next = request.GET.get("next", "")
         login_form = DynamicLoginForm
         return render(request, "login.html", {
             "login_form": login_form,
-            "next": next
+            "next": next,
+            "banners": banners
         })
 
     def post(self, request, *args, **kwargs):
@@ -44,7 +50,7 @@ class LoginView(View):
 
         # 表单验证
         login_form = LoginForm(request.POST)
-
+        banners = Banner.objects.all()[:3]
         if login_form.is_valid():
             # 用于通过用户和密码查询用户是否存在
             username = login_form.cleaned_data["username"]
@@ -62,9 +68,9 @@ class LoginView(View):
                 return HttpResponseRedirect(reverse("index"))
             else:
                 # 未查询到用户
-                return render(request, "login.html", {"msg": "用户名或密码错误", "login_form": login_form})
+                return render(request, "login.html", {"msg": "用户名或密码错误", "login_form": login_form, "banners": banners})
         else:
-            return render(request, "login.html", {"login_form": login_form})
+            return render(request, "login.html", {"login_form": login_form, "banners": banners})
 
 
 # 退出登录
@@ -110,15 +116,18 @@ class DynamicLoginView(View):
             return HttpResponseRedirect(reverse("idnex"))
         next = request.GET.get("next", "")
         login_form = DynamicLoginForm()
+        banners = Banner.objects.all()[:3]
         return render(request, "login.html", {
             "login_form": login_form,
-            "next": next
+            "next": next,
+            "banners": banners
         })
 
     def post(self, request, *args, **kwargs):
         # 验证用户输入是否正确
         login_form = DynamicLoginPostForm(request.POST)
         dynamic_login = True
+        banners = Banner.objects.all()[:3]
         if login_form.is_valid():
             mobile = login_form.cleaned_data["mobile"]
             # 查询用户是否存在
@@ -141,7 +150,8 @@ class DynamicLoginView(View):
         else:
             d_form = DynamicLoginForm
             return render(request, "login.html",
-                          {"login_form": login_form, 'd_form': d_form, "dynamic_login": dynamic_login})
+                          {"login_form": login_form, 'd_form': d_form, "dynamic_login": dynamic_login,
+                           "banners": banners})
 
 
 # 用户注册
@@ -389,3 +399,14 @@ def message_nums(request):
         return {'unread_nums': request.user.usermessage_set.filter(has_read=False).count()}
     else:
         return {}
+
+
+# 自定义验证
+class CoustoAuth(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        try:
+            user = UserProfile.objects.get(Q(username=username) | Q(mobile=username))
+            if user.check_password(password):
+                return user
+        except Exception as e:
+            return None

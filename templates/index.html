@@ -28,19 +28,19 @@
         <div class="wp">
             <ul class="feature">
                 <li class="feature1">
-                    <img class="pic" src="/static/images/feature1.png"/>
+                    <img class="pic" src="{% static 'images/feature1.png' %}"/>
                     <p class="center">专业权威</p>
                 </li>
                 <li class="feature2">
-                    <img class="pic" src="/static/images/feature2.png"/>
+                    <img class="pic" src="{% static 'images/feature2.png' %}"/>
                     <p class="center">课程最新</p>
                 </li>
                 <li class="feature3">
-                    <img class="pic" src="/static/images/feature3.png"/>
+                    <img class="pic" src="{% static 'images/feature3.png' %}"/>
                     <p class="center">名师授课</p>
                 </li>
                 <li class="feature4">
-                    <img class="pic" src="/static/images/feature4.png"/>
+                    <img class="pic" src="{% static 'images/feature4.png' %}"/>
                     <p class="center">数据真实</p>
                 </li>
             </ul>
@@ -64,7 +64,8 @@
                                 <ul class="imgs">
                                     {% for banner_course in banner_courses %}
                                         <li>
-                                            <a href="{% url 'courses:detail' banner_course.id %}" title="{{ banner_course.name }}">
+                                            <a href="{% url 'courses:detail' banner_course.id %}"
+                                               title="{{ banner_course.name }}">
                                                 <img width="470" height="300"
                                                      src="{{ banner_course.image.url }}"/>
                                             </a>
@@ -77,18 +78,19 @@
                         </div>
                         {% for course in courses %}
                             <div class="module1_{{ forloop.counter|add:2 }} box">
-                                <a href="course-detail.html">
+                                <a href="{% url 'courses:detail' course.id %}">
                                     <img width="233" height="190" src="{{ course.image.url }}"/>
                                 </a>
                                 <div class="des">
-                                    <a href="course-detail.html">
+                                    <a href="{% url 'courses:detail' course.id %}">
                                         <h2 title="django入门">{{ course.name }}</h2>
                                     </a>
                                     <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
                                     <span class="fr">学习人数：{{ course.students }}</span>
                                 </div>
                                 <div class="bottom">
-                                    <span class="fl" title="慕课网">{{ course.course_org.name }}</span>
+                                    <span class="fl"
+                                          title="{{ course.course_org.name }}">{{ course.course_org.name }}</span>
                                     <span class="star fr">{{ course.fav_num }}</span>
                                 </div>
                             </div>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from pure_pagination import Paginator, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from apps.courses.models import Course, CourseTag, CourseResource, Video
 
@@ -13,7 +14,14 @@ from apps.operations.models import UserFavorite, UserCourse, CourseComments
 class CourseListView(View):
     def get(self, request, *args, **kwargs):
         """获取课程列表信息"""
-        all_courses = Course.objects.order_by("-add_time");
+        all_courses = Course.objects.order_by("-add_time")
+
+        # 搜索关键词
+        keywords = request.GET.get("keywords", "")
+        s_type = "course"
+        if keywords:
+            all_courses = all_courses.filter(
+                Q(name__icontains=keywords) | Q(desc__icontains=keywords) | Q(desc__icontains=keywords))
 
         # 对授课机构进行排名
         hot_courses = all_courses.order_by("-click_nums")[:3]
@@ -37,7 +45,9 @@ class CourseListView(View):
         return render(request, "course-list.html", {
             "all_courses": courses,
             "sort": sort,
-            "hot_courses": hot_courses
+            "hot_courses": hot_courses,
+            "s_type": s_type,
+            "keywords": keywords
         })
 
 

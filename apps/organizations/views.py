@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-
+from django.db.models import Q
 from pure_pagination import Paginator, PageNotAnInteger
 from django.http import JsonResponse
 
@@ -18,6 +18,13 @@ class OrgView(View):
         org_data['citys'] = City.objects.all()
         # 对授课机构进行排名
         hot_orgs = all_orgs.order_by("-click_nums")[:3]
+
+        # 搜索关键词
+        keywords = request.GET.get("keywords", "")
+        s_type = "org"
+        if keywords:
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=keywords) | Q(desc__icontains=keywords))
 
         # 对课程机构进行筛选
         category = request.GET.get("ct", "")
@@ -54,7 +61,9 @@ class OrgView(View):
             "category": category,
             "city_id": city_id,
             "sort": sort,
-            "hot_orgs": hot_orgs
+            "hot_orgs": hot_orgs,
+            "s_type": s_type,
+            "keywords": keywords
         })
 
 
@@ -192,6 +201,13 @@ class TeacherListView(View):
         # 热门讲师
         hot_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
 
+        # 搜索关键词
+        keywords = request.GET.get("keywords", "")
+        s_type = "teacher"
+        if keywords:
+            all_teachers = all_teachers.filter(
+                Q(name__icontains=keywords))
+
         # 讲师进行排序
         sort = request.GET.get("sort", "")
         if sort == "hot":
@@ -211,7 +227,9 @@ class TeacherListView(View):
             "teachers": teachers,
             "teacher_nums": teacher_nums,
             "sort": sort,
-            "hot_teachers": hot_teachers
+            "hot_teachers": hot_teachers,
+            "s_type": s_type,
+            "keywords": keywords
         })
 
 

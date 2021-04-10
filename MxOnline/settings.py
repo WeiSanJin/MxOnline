@@ -27,6 +27,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
+# 自定义验证
+AUTHENTICATION_BACKENDS = [
+    "apps.users.views.CoustoAuth"
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -133,7 +137,6 @@ STATICFILES_DIRS = [
 ]
 
 # 腾讯云短信配置
-
 
 # Redis配置
 REDIS_HOST = "127.0.0.1"
