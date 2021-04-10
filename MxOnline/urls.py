@@ -39,6 +39,9 @@ urlpatterns = [
 
     # 配置上传文件的访问url
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    # 404、403、500页面静态文件
+    # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+
     # 机构相关页面
     url(r'^org/', include(('apps.organizations.urls', "organizations"), namespace="org")),
 

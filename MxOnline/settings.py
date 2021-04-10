@@ -24,7 +24,7 @@ SECRET_KEY = 'kdj01v*6w)^%u4r_z74uje$1jaw9%ff3uw7k_91(!^y9un_m6z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 # 自定义验证
@@ -145,6 +145,7 @@ REDIS_PORT = 6379
 # 上传图片配置
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 分页相关设置
 PAGINATION_SETTINGS = {
