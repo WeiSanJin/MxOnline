@@ -5,6 +5,8 @@
 # @Site :https://github.com/WeiSanJin
 import xadmin
 
+from xadmin.layout import Main, Fieldset, Side, Row, FormHelper
+
 from apps.courses.models import Course, Lesson, Video, CourseResource, CourseTag
 
 
@@ -51,8 +53,47 @@ class CourseResourceAdmin(object):
     search_fields = ['course', 'name']
 
 
-xadmin.site.register(Course, CourseAdmin)
+# 修改xadmin页面的布局
+class NewCourseAdmin(object):
+    list_filter = ['name', 'teacher__name', 'category', 'degree', 'learn_times', 'students', 'fav_num', 'click_nums',
+                   'add_time']
+    list_display = ['name', 'teacher', 'category', 'degree', 'students', 'fav_num', 'click_nums',
+                    'is_classics', 'is_banner',
+                    'add_time']
+    list_editable = ['degree', 'is_classics', 'is_banner', 'desc']
+    search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
+
+    def get_form_layout(self):
+        self.form_layout = (
+            Main(
+                Fieldset("讲师信息",
+                         'teacher', 'course_org',
+                         css_class='unsort no_title'
+                         ),
+                Fieldset("基本信息",
+                         'name', 'desc',
+                         Row('learn_times', 'degree'),
+                         Row('category', 'tag'),
+                         'youneed_know', 'teacher_tell', 'detail',
+                         ),
+            ),
+            Side(
+                Fieldset("访问信息",
+                         'fav_nums', 'click_nums', 'students', 'add_time'
+                         ),
+            ),
+            Side(
+                Fieldset("选择信息",
+                         'is_banner', 'is_classics'
+                         ),
+            )
+        )
+        return super(NewCourseAdmin, self).get_form_layout()
+
+
+# xadmin.site.register(Course, CourseAdmin)
 xadmin.site.register(CourseTag, CourseTagAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
+xadmin.site.register(Course, NewCourseAdmin)
