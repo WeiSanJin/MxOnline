@@ -105,3 +105,11 @@ class CourseResource(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+# 轮播图
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = "轮播课程"
+        verbose_name_plural = verbose_name
+        proxy = True

@@ -5,9 +5,9 @@
 # @Site :https://github.com/WeiSanJin
 import xadmin
 
-from xadmin.layout import Main, Fieldset, Side, Row, FormHelper
+from xadmin.layout import Main, Fieldset, Side, Row
 
-from apps.courses.models import Course, Lesson, Video, CourseResource, CourseTag
+from apps.courses.models import Course, Lesson, Video, CourseResource, CourseTag, BannerCourse
 
 
 # 课程信息
@@ -91,9 +91,26 @@ class NewCourseAdmin(object):
         return super(NewCourseAdmin, self).get_form_layout()
 
 
+# 轮播课程管理
+class BannerCourseAdmin(object):
+    list_filter = ['name', 'teacher__name', 'category', 'degree', 'learn_times', 'students', 'fav_num', 'click_nums',
+                   'add_time']
+    list_display = ['name', 'teacher', 'category', 'degree', 'students', 'fav_num', 'click_nums',
+                    'is_classics', 'is_banner',
+                    'add_time']
+    list_editable = ['degree', 'is_classics', 'is_banner', 'desc']
+    search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
+
+    def queryset(self):
+        qs = super().queryset()
+        qs = qs.filter(is_banner=True)
+        return qs
+
+
 # xadmin.site.register(Course, CourseAdmin)
 xadmin.site.register(CourseTag, CourseTagAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
 xadmin.site.register(Course, NewCourseAdmin)
+xadmin.site.register(BannerCourse, BannerCourseAdmin)
