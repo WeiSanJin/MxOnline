@@ -6,6 +6,8 @@ from django.db import models
 from apps.users.models import BaseModel
 from apps.organizations.models import Teacher, CourseOrg
 
+from DjangoUeditor.models import UEditorField
+
 # 1.设计表结构注意的点
 '''
     实体1 <关系> 实体2
@@ -32,7 +34,8 @@ class Course(BaseModel):
     youneed_know = models.CharField(verbose_name="课程须知", max_length=300, default="")
     teacher_tell = models.CharField(verbose_name="老师告诉你", max_length=300, default="")
     degree = models.CharField(verbose_name="难度", max_length=2, choices=(("cj", "初级"), ("zj", "中级"), ("gj", "高级")))
-    detail = models.TextField(verbose_name="课程详情")
+    detail = UEditorField(verbose_name="课程详情", width='100%', height=300, imagePath="courses/ueditor/images/",
+                          filePath="courses/ueditor/files/", default="")
     image = models.ImageField(verbose_name="封面图", max_length=100, upload_to="courses/%Y/%m")
     is_classics = models.BooleanField(verbose_name="是否经典课程", default=False)
     is_banner = models.BooleanField(verbose_name="是否广告位", default=False)
@@ -58,6 +61,7 @@ class Course(BaseModel):
     def go_to(self):
         from django.utils.safestring import mark_safe
         return mark_safe("<a href='/courses/{}' target='_blank'>跳转</a>".format(self.id))
+
     go_to.short_description = "跳转"
 
 

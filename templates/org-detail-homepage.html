@@ -60,7 +60,7 @@
             <a class="green fr more" href="{% url 'org:desc' course_org.id%}">查看更多 > </a>
         </div>
         <div class="cont">
-            {{ course_org.desc }}
+            {% autoescape off %}{{ course_org.desc }}{% endautoescape %}
         </div>
     </div>
 {% endblock %}

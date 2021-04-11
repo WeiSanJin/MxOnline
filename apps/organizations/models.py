@@ -2,6 +2,8 @@ from django.db import models
 
 from apps.users.models import BaseModel
 
+from DjangoUeditor.models import UEditorField
+
 
 # 城市
 class City(BaseModel):
@@ -20,7 +22,8 @@ class City(BaseModel):
 class CourseOrg(BaseModel):
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name="所在城市")
     name = models.CharField(verbose_name="机构名称", max_length=50)
-    desc = models.TextField(verbose_name="机构描述")
+    desc = UEditorField(verbose_name="描述", width='100%', height=300, imagePath="courses/ueditor/images/",
+                        filePath="courses/ueditor/files/", default="")
     tag = models.CharField(verbose_name="机构标签", max_length=10, default="全国知名")
     category = models.CharField(verbose_name="机构类别", max_length=4,
                                 choices=(("pxjg", "培训机构"), ("gr", "个人"), ("gx", "高校")))

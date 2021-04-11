@@ -4,6 +4,7 @@
 # @Time :2021/04/03 18:36
 # @Site :https://github.com/WeiSanJin
 import xadmin
+from import_export import resources
 
 from xadmin.layout import Main, Fieldset, Side, Row
 
@@ -53,8 +54,31 @@ class CourseResourceAdmin(object):
     search_fields = ['course', 'name']
 
 
+class LessonInline(object):
+    model = Lesson
+    style = "tab"
+    extra = 0
+    exclude = ["add_time"]
+
+
+class CourseResourceInline(object):
+    model = CourseResource
+    style = "tab"
+    extra = 0
+
+
+# 导入导出
+class MyResource(resources.ModelResource):
+    class Meta:
+        model = CourseResource
+        # fields = ('name', 'description',)
+        # exclude = ()
+
+
 # 修改xadmin页面的布局
 class NewCourseAdmin(object):
+    # 导入导出配置，此处也可以只配置一个导入功能或导出功能，而把另一个功能关掉
+    import_export_args = {'import_resource_class': MyResource, 'export_resource_class': MyResource}
     list_filter = ['name', 'teacher__name', 'category', 'degree', 'learn_times', 'students', 'fav_num', 'click_nums',
                    'add_time']
     list_display = ['name', 'teacher', 'category', 'degree', 'students', 'fav_num', 'click_nums',
@@ -62,6 +86,19 @@ class NewCourseAdmin(object):
                     'show_image', 'go_to', 'add_time']
     list_editable = ['degree', 'is_classics', 'is_banner', 'desc']
     search_fields = ['name', 'teacher', 'desc', 'detail', 'degree', 'learn_times', 'students']
+    # 只读
+    # readonly_fields = ["students", "click_nums", "fav_num", "add_time"]
+    # 隐藏
+    # exclude = ["click_nums", "fav_nums"]
+    # 排序
+    ordering = ["click_nums"]
+    # 更换图标
+    model_icon = 'fa fa-address-book'
+    # 关联其他表
+    inlines = [LessonInline, CourseResourceInline]
+    style_fields = {
+        "detail": "ueditor"
+    }
 
     def get_form_layout(self):
         self.form_layout = (

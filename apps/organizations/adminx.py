@@ -29,14 +29,16 @@ class TeacherAdmin(object):
 
 # 课程机构
 class CourseOrgAdmin(object):
-    list_filter = ['city__name', 'name', 'desc', 'tag', 'degree', 'click_nums', 'fav_nums', 'course_nums', 'students',
+    list_filter = ['city__name', 'name', 'desc', 'tag', 'click_nums', 'fav_nums', 'course_nums', 'students',
                    'address', 'add_time']
-    list_display = ['name', 'desc', 'tag', 'degree', 'click_nums', 'fav_nums', 'course_nums', 'students', 'image',
+    list_display = ['name', 'desc', 'tag', 'click_nums', 'fav_nums', 'course_nums', 'students', 'image',
                     'address', 'city', 'add_time']
-    list_editable = ['name', 'desc', 'tag', 'degree', 'click_nums', 'fav_nums', 'course_nums', 'students', 'image',
+    list_editable = ['name', 'desc', 'tag', 'click_nums', 'fav_nums', 'course_nums', 'students', 'image',
                      'address', 'city', 'add_time']
-    search_fields = ['name', 'desc', 'tag', 'degree', 'address', 'city']
-
+    search_fields = ['name', 'desc', 'tag', 'address', 'city']
+    style_fields = {
+        "desc": "ueditor"
+    }
 
 # 城市管理
 class CityAdmin(object):
